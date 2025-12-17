@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ERP PT Ekea Apa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Courier New', monospace; background-color: #f3f3f3; }
+        .box { border: 2px solid black; background: white; box-shadow: 4px 4px 0 black; }
+        .btn { border: 2px solid black; background: white; font-weight: bold; padding: 0.5rem; transition: 0.1s; display: block; width: 100%; text-align: center; }
+        .btn:hover { background: black; color: white; }
+        .btn:active { transform: translate(2px, 2px); box-shadow: none; }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <!-- HALAMAN LOGIN -->
+    <div id="page-login" class="box p-8 w-96 text-center">
+        <h1 class="text-3xl font-bold mb-2">ERP SYSTEM</h1>
+        <p class="mb-6 text-sm">PT EKEA APA</p>
+        
+        <div class="mb-4 text-left">
+            <label class="block font-bold mb-1">Username</label>
+            <input type="text" class="w-full border-2 border-black p-2 outline-none" placeholder="admin / staff / manager">
+        </div>
+        <div class="mb-2 text-left">
+            <label class="block font-bold mb-1">Password</label>
+            <input type="password" class="w-full border-2 border-black p-2 outline-none" placeholder="******">
+        </div>
+        <div class="text-right mb-6">
+            <a href="#" onclick="alert('Hubungi Admin untuk reset password')" class="text-xs underline text-gray-600">Lupa Password?</a>
+        </div>
+        
+        <button class="btn mb-6">MASUK</button>
+        
+        <div class="text-xs text-left border-t-2 border-black pt-4">
+            <p class="font-bold mb-2">Pintas Simulasi (Pilih Aktor):</p>
+            <div class="grid grid-cols-2 gap-2">
+                <a href="admin.html" class="btn text-xs">Admin / Owner</a>
+                <a href="divisi_gudang.html" class="btn text-xs">Divisi Gudang</a>
+                <a href="divisi_produksi.html" class="btn text-xs">Divisi Produksi</a>
+                <a href="divisi_penjualan.html" class="btn text-xs">Divisi Penjualan</a>
+                <a href="divisi_keuangan.html" class="btn text-xs">Divisi Keuangan</a>
+                <button onclick="showError(403)" class="btn text-xs bg-red-100">Test Error 403</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HALAMAN 404 / 403 (Hidden by default) -->
+    <div id="page-error" class="hidden fixed inset-0 bg-gray-200 flex items-center justify-center z-50">
+        <div class="box p-10 text-center border-4 border-red-600">
+            <h1 id="error-code" class="text-6xl font-bold mb-4">404</h1>
+            <h2 id="error-msg" class="text-xl font-bold mb-6">Halaman Tidak Ditemukan</h2>
+            <button onclick="location.reload()" class="btn mx-auto w-48">KEMBALI KE LOGIN</button>
+        </div>
+    </div>
+
+    <!-- HALAMAN PROFIL (Simulasi) -->
+    <div id="page-profile" class="hidden fixed inset-0 bg-white z-40 p-10">
+        <div class="max-w-md mx-auto box p-6">
+            <h1 class="text-2xl font-bold border-b-2 border-black pb-2 mb-4">Profil Pengguna</h1>
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-16 h-16 bg-gray-300 border-2 border-black rounded-full flex items-center justify-center font-bold">IMG</div>
+                <div>
+                    <p class="font-bold">Budi Santoso</p>
+                    <p class="text-sm">Staff Gudang</p>
+                    <button class="text-xs underline">Edit Foto</button>
+                </div>
+            </div>
+            <label class="block font-bold text-sm">Ganti Password</label>
+            <input type="password" placeholder="Password Baru" class="w-full border-2 border-black p-2 mb-2">
+            <button class="btn mt-4" onclick="location.reload()">SIMPAN & KELUAR</button>
+        </div>
+    </div>
+
+    <script>
+        function showError(code) {
+            document.getElementById('page-login').classList.add('hidden');
+            document.getElementById('page-error').classList.remove('hidden');
+            document.getElementById('error-code').innerText = code;
+            document.getElementById('error-msg').innerText = code === 403 ? "Akses Ditolak (Access Denied)" : "Halaman Tidak Ditemukan";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Penjualan - PT Ekea Apa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Courier New', Courier, monospace; background-color: #e5e5e5; color: #000; }
+        
+        /* Brutalist Styles */
+        .box { 
+            background: white; 
+            border: 3px solid black; 
+            box-shadow: 6px 6px 0px 0px black; 
+        }
+        
+        .btn { 
+            border: 2px solid black; 
+            background: white; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: all 0.1s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .btn:hover { background: black; color: white; transform: translate(-1px, -1px); box-shadow: 3px 3px 0px 0px rgba(0,0,0,0.2); }
+        .btn:active { transform: translate(1px, 1px); box-shadow: none; }
+        
+        /* Sidebar */
+        .sidebar-btn { 
+            text-align: left; 
+            padding: 1rem; 
+            width: 100%; 
+            border: 2px solid transparent; 
+            transition: all 0.2s; 
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: bold;
+        }
+        .sidebar-btn:hover { background-color: #fff; border-color: black; }
+        .sidebar-btn.active { background-color: black; color: white; border-color: black; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        th, td { border-bottom: 2px solid black; padding: 16px; text-align: left; vertical-align: middle; }
+        th { background-color: #f3f4f6; border-top: 2px solid black; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; }
+        tr:hover { background-color: #fef9c3; }
+
+        /* Metrics */
+        .metric-value { font-size: 2rem; font-weight: 900; letter-spacing: -0.05em; }
+        .badge { padding: 4px 8px; font-size: 0.7rem; border: 2px solid black; font-weight: 800; text-transform: uppercase; }
+        
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="w-80 bg-gray-100 border-r-4 border-black flex flex-col z-20">
+        <!-- Identitas Perusahaan -->
+        <div class="p-6 border-b-4 border-black bg-white">
+             <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-black text-white flex items-center justify-center font-black text-xl border-2 border-black">
+                    EA
+                </div>
+                <div>
+                    <h1 class="font-black text-lg leading-none">PT EKEA APA</h1>
+                    <p class="text-[10px] font-bold text-gray-500 tracking-widest mt-1">FURNITURE MFG.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-4 border-b-4 border-black bg-purple-100">
+            <h2 class="font-black text-lg flex items-center gap-2 tracking-tighter">
+                <i data-lucide="trending-up" class="w-6 h-6"></i> PENJUALAN
+            </h2>
+            <div class="mt-1 inline-block bg-black text-white px-2 py-0.5 text-[10px] font-bold tracking-widest">
+                MANAGER ACCESS
+            </div>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto p-4 space-y-3">
+            <div class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1 border-b-2 border-gray-300 pb-1">Monitoring</div>
+            <button onclick="nav('dash', this)" class="sidebar-btn active">
+                <i data-lucide="bar-chart-2" class="w-5 h-5"></i> Dashboard KPI
+            </button>
+            <button onclick="nav('report', this)" class="sidebar-btn">
+                <i data-lucide="pie-chart" class="w-5 h-5"></i> Laporan Penjualan
+            </button>
+
+            <div class="text-xs font-bold text-gray-500 uppercase tracking-widest mt-6 mb-1 border-b-2 border-gray-300 pb-1">Kontrol</div>
+            <button onclick="nav('approval', this)" class="sidebar-btn flex justify-between">
+                <div class="flex items-center gap-3"><i data-lucide="check-square" class="w-5 h-5"></i> Approval Pesanan</div>
+                <span class="bg-red-600 text-white text-xs px-2 py-0.5 rounded-full border border-black">1</span>
+            </button>
+            <button onclick="nav('customers', this)" class="sidebar-btn">
+                <i data-lucide="users" class="w-5 h-5"></i> Analisis Pelanggan
+            </button>
+        </nav>
+
+        <div class="p-6 border-t-4 border-black bg-white">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 bg-gray-200 border-2 border-black flex items-center justify-center font-bold text-lg">M</div>
+                <div class="text-sm">
+                    <p class="font-bold">Ibu Ratna</p>
+                    <p class="text-gray-500">Manajer Penjualan</p>
+                </div>
+            </div>
+            <a href="index.html" class="btn w-full py-3 hover:bg-red-600 hover:text-white hover:border-red-600">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Keluar System
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 overflow-y-auto p-8 bg-gray-200 relative">
+
+        <!-- 1. DASHBOARD KPI -->
+        <section id="dash" class="view-section">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-4xl font-black mb-2">Sales Overview</h2>
+                    <p class="text-gray-600 font-bold">Analisis Kinerja Penjualan (Real-time)</p>
+                </div>
+                <div class="flex gap-2">
+                    <button class="btn px-4 py-2"><i data-lucide="calendar" class="w-4 h-4"></i> Periode: Bulan Ini</button>
+                </div>
+            </div>
+
+            <!-- Top Metrics -->
+            <div class="grid grid-cols-4 gap-6 mb-8">
+                <div class="box p-5 flex flex-col justify-between h-36">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xs font-bold uppercase text-gray-500">Total Penjualan</h3>
+                        <i data-lucide="dollar-sign" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <p class="metric-value">Rp 450 Jt</p>
+                        <p class="text-xs font-bold text-green-700 mt-1">▲ 12% dari bulan lalu</p>
+                    </div>
+                </div>
+                <div class="box p-5 flex flex-col justify-between h-36">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xs font-bold uppercase text-gray-500">Pencapaian Target</h3>
+                        <i data-lucide="target" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <p class="metric-value">92%</p>
+                        <div class="w-full bg-gray-200 h-1 mt-2"><div class="bg-black h-1 w-[92%]"></div></div>
+                    </div>
+                </div>
+                <div class="box p-5 flex flex-col justify-between h-36">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xs font-bold uppercase text-gray-500">Total Order</h3>
+                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <p class="metric-value">45 SO</p>
+                        <p class="text-xs font-bold text-gray-500 mt-1">3 Pending Approval</p>
+                    </div>
+                </div>
+                <div class="box p-5 flex flex-col justify-between h-36 bg-purple-100 border-purple-900">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xs font-bold uppercase text-purple-800">Top Sales</h3>
+                        <i data-lucide="award" class="w-5 h-5 text-purple-800"></i>
+                    </div>
+                    <div>
+                        <p class="font-black text-xl">Andi Saputra</p>
+                        <p class="text-xs font-bold text-purple-800 mt-1">Rp 150 Jt</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts & Lists -->
+            <div class="grid grid-cols-3 gap-8">
+                <div class="col-span-2 box p-6">
+                    <h3 class="font-bold border-b-2 border-black pb-2 mb-4">Tren Penjualan (Mingguan)</h3>
+                    <!-- Mockup Chart CSS -->
+                    <div class="flex items-end h-64 gap-6 px-4 pb-4 border-l-2 border-b-2 border-gray-400">
+                        <div class="w-full bg-purple-300 h-[50%] relative group cursor-pointer hover:bg-purple-600 transition-all">
+                            <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold opacity-0 group-hover:opacity-100">50jt</span>
+                        </div>
+                        <div class="w-full bg-purple-300 h-[70%] relative group cursor-pointer hover:bg-purple-600 transition-all">
+                            <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold opacity-0 group-hover:opacity-100">70jt</span>
+                        </div>
+                        <div class="w-full bg-purple-300 h-[60%] relative group cursor-pointer hover:bg-purple-600 transition-all">
+                            <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold opacity-0 group-hover:opacity-100">60jt</span>
+                        </div>
+                        <div class="w-full bg-purple-300 h-[90%] relative group cursor-pointer hover:bg-purple-600 transition-all">
+                             <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold opacity-0 group-hover:opacity-100">90jt</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between text-xs font-bold mt-2 px-6 text-gray-500">
+                        <span>Minggu 1</span><span>Minggu 2</span><span>Minggu 3</span><span>Minggu 4</span>
+                    </div>
+                </div>
+                
+                <div class="box p-0">
+                    <div class="p-4 border-b-2 border-black bg-yellow-100">
+                        <h3 class="font-bold flex items-center gap-2"><i data-lucide="star" class="w-4 h-4"></i> Produk Terlaris</h3>
+                    </div>
+                    <div class="p-4 space-y-4">
+                        <div class="flex items-center gap-4 border-b border-gray-300 pb-2">
+                            <div class="w-8 h-8 bg-gray-200 border border-black flex items-center justify-center font-bold text-xs">1</div>
+                            <div class="flex-1">
+                                <p class="font-bold text-sm">Meja Makan Minimalis</p>
+                                <p class="text-xs text-gray-500">25 Unit Terjual</p>
+                            </div>
+                            <p class="font-bold text-sm">Rp 37.5jt</p>
+                        </div>
+                        <div class="flex items-center gap-4 border-b border-gray-300 pb-2">
+                            <div class="w-8 h-8 bg-gray-200 border border-black flex items-center justify-center font-bold text-xs">2</div>
+                            <div class="flex-1">
+                                <p class="font-bold text-sm">Kursi Tamu Jati</p>
+                                <p class="text-xs text-gray-500">15 Unit Terjual</p>
+                            </div>
+                            <p class="font-bold text-sm">Rp 11.25jt</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-8 h-8 bg-gray-200 border border-black flex items-center justify-center font-bold text-xs">3</div>
+                            <div class="flex-1">
+                                <p class="font-bold text-sm">Lemari 2 Pintu</p>
+                                <p class="text-xs text-gray-500">5 Unit Terjual</p>
+                            </div>
+                            <p class="font-bold text-sm">Rp 12.5jt</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. APPROVAL CENTER -->
+        <section id="approval" class="view-section hidden">
+            <h2 class="text-3xl font-black mb-6">Persetujuan Pesanan</h2>
+            
+            <div class="grid grid-cols-1 gap-6">
+                <!-- Approval Request Card -->
+                <div class="box p-6 border-l-8 border-l-red-500">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="bg-red-100 text-red-600 border border-red-600 px-2 py-0.5 text-xs font-bold uppercase">Over Credit Limit</span>
+                                <h3 class="text-xl font-black">SO-2025-009</h3>
+                            </div>
+                            <p class="text-gray-600 font-bold">Pelanggan: CV Interior Bagus</p>
+                            <p class="text-sm text-gray-500">Sales: Budi Santoso</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs font-bold uppercase text-gray-500">Nilai Order</p>
+                            <p class="text-2xl font-black">Rp 25.000.000</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-100 p-4 border border-black mb-4 text-sm">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="font-bold text-gray-500">Batas Kredit</p>
+                                <p class="font-bold">Rp 50.000.000</p>
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-500">Total Piutang (Termasuk Order Ini)</p>
+                                <p class="font-bold text-red-600">Rp 65.000.000</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button onclick="alert('Pesanan Disetujui')" class="btn py-2 px-6 bg-black text-white hover:bg-green-700 hover:border-green-700">
+                            <i data-lucide="check" class="w-4 h-4 mr-2"></i> SETUJUI (OVERRIDE)
+                        </button>
+                        <button onclick="alert('Pesanan Ditolak')" class="btn py-2 px-6 border-red-600 text-red-600 hover:bg-red-50">
+                            <i data-lucide="x" class="w-4 h-4 mr-2"></i> TOLAK PESANAN
+                        </button>
+                        <button class="btn py-2 px-4 ml-auto">
+                            <i data-lucide="message-square" class="w-4 h-4 mr-2"></i> Hubungi Sales
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- No more approvals -->
+                <div class="p-4 text-center text-gray-500 italic">
+                    Tidak ada permintaan persetujuan lainnya.
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. LAPORAN -->
+        <section id="report" class="view-section hidden">
+            <h2 class="text-3xl font-black mb-6">Laporan Penjualan</h2>
+            <div class="box p-6 h-96 flex flex-col items-center justify-center border-dashed bg-gray-50">
+                <i data-lucide="file-bar-chart" class="w-16 h-16 text-gray-400 mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-500">Analisis Penjualan Lanjutan</h3>
+                <p class="text-gray-400 text-center max-w-md mt-2">
+                    Laporan detail per wilayah, kategori produk, dan profitabilitas per pelanggan akan ditampilkan di sini.
+                </p>
+                <div class="flex gap-2 mt-4">
+                    <button class="btn px-6 py-2"><i data-lucide="download" class="w-4 h-4 mr-2"></i> Excel</button>
+                    <button class="btn px-6 py-2"><i data-lucide="printer" class="w-4 h-4 mr-2"></i> PDF</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. CUSTOMERS -->
+        <section id="customers" class="view-section hidden">
+            <h2 class="text-3xl font-black mb-6">Analisis Pelanggan</h2>
+            
+            <div class="box p-6 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-lg">Daftar Pelanggan Utama</h3>
+                    <input type="text" placeholder="Cari Pelanggan..." class="border-2 border-black p-2 w-1/3">
+                </div>
+                <table class="w-full">
+                    <thead>
+                        <tr>
+                            <th>Pelanggan</th>
+                            <th>Total Pembelian (YTD)</th>
+                            <th>Piutang</th>
+                            <th>Status Kredit</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-bold">Toko Mebel Jaya</td>
+                            <td>Rp 150.000.000</td>
+                            <td class="text-green-600 font-bold">Rp 15.000.000</td>
+                            <td><span class="badge bg-green-200 text-green-800 border-green-800">AMAN</span></td>
+                            <td><button class="btn px-2 py-1"><i data-lucide="eye" class="w-4 h-4"></i></button></td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">CV Interior Bagus</td>
+                            <td>Rp 80.000.000</td>
+                            <td class="text-red-600 font-bold">Rp 45.000.000</td>
+                            <td><span class="badge bg-red-200 text-red-800 border-red-800">OVER LIMIT</span></td>
+                            <td><button class="btn px-2 py-1"><i data-lucide="eye" class="w-4 h-4"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+        function nav(id, btn) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Gudang Workspace - ERP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Courier New', Courier, monospace; background-color: #e5e5e5; color: #000; }
+        
+        /* Brutalist Styles */
+        .box { 
+            background: white; 
+            border: 3px solid black; 
+            box-shadow: 6px 6px 0px 0px black; 
+        }
+        
+        .btn { 
+            border: 2px solid black; 
+            background: white; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: all 0.1s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .btn:hover { background: black; color: white; transform: translate(-1px, -1px); box-shadow: 3px 3px 0px 0px rgba(0,0,0,0.2); }
+        .btn:active { transform: translate(1px, 1px); box-shadow: none; }
+        
+        /* Sidebar */
+        .sidebar-btn { 
+            text-align: left; 
+            padding: 1rem; 
+            width: 100%; 
+            border: 2px solid transparent; 
+            transition: all 0.2s; 
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: bold;
+        }
+        .sidebar-btn:hover { background-color: #fff; border-color: black; }
+        .sidebar-btn.active { background-color: black; color: white; border-color: black; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        th, td { border-bottom: 2px solid black; padding: 16px; text-align: left; vertical-align: middle; }
+        th { background-color: #f3f4f6; border-top: 2px solid black; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; }
+        tr:hover { background-color: #fef9c3; }
+
+        /* Badges & Metrics */
+        .metric-value { font-size: 2rem; font-weight: 900; letter-spacing: -0.05em; }
+        .badge { padding: 4px 8px; font-size: 0.7rem; border: 2px solid black; font-weight: 800; text-transform: uppercase; }
+        
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="w-80 bg-gray-100 border-r-4 border-black flex flex-col z-20">
+        <div class="p-6 border-b-4 border-black bg-white">
+            <h1 class="font-black text-2xl flex items-center gap-3 tracking-tighter">
+                <i data-lucide="container" class="w-8 h-8"></i> GUDANG
+            </h1>
+            <div class="mt-2 inline-block bg-black text-white px-2 py-1 text-xs font-bold tracking-widest">
+                MANAGER ACCESS
+            </div>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto p-4 space-y-3">
+            <div class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1 border-b-2 border-gray-300 pb-1">Executive View</div>
+            <button onclick="nav('dash', this)" class="sidebar-btn active">
+                <i data-lucide="bar-chart-2" class="w-5 h-5"></i> Dashboard Aset
+            </button>
+            <button onclick="nav('report', this)" class="sidebar-btn">
+                <i data-lucide="pie-chart" class="w-5 h-5"></i> Laporan Stok
+            </button>
+
+            <div class="text-xs font-bold text-gray-500 uppercase tracking-widest mt-6 mb-1 border-b-2 border-gray-300 pb-1">Kontrol & Audit</div>
+            <button onclick="nav('audit', this)" class="sidebar-btn">
+                <i data-lucide="file-search" class="w-5 h-5"></i> Kartu Stok (Audit)
+            </button>
+            <button onclick="nav('approval', this)" class="sidebar-btn flex justify-between">
+                <div class="flex items-center gap-3"><i data-lucide="check-square" class="w-5 h-5"></i> Approval</div>
+                <span class="bg-red-600 text-white text-xs px-2 py-0.5 rounded-full border border-black">2</span>
+            </button>
+            <button onclick="nav('opname', this)" class="sidebar-btn">
+                <i data-lucide="clipboard-list" class="w-5 h-5"></i> Stock Opname
+            </button>
+        </nav>
+
+        <div class="p-6 border-t-4 border-black bg-white">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 bg-gray-200 border-2 border-black flex items-center justify-center font-bold text-lg">M</div>
+                <div class="text-sm">
+                    <p class="font-bold">Bpk. Sentosa</p>
+                    <p class="text-gray-500">Ka. Gudang</p>
+                </div>
+            </div>
+            <a href="index.html" class="btn w-full py-3 hover:bg-red-600 hover:text-white hover:border-red-600">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Keluar System
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 overflow-y-auto p-8 bg-gray-200 relative">
+
+        <!-- 1. DASHBOARD ASET -->
+        <section id="dash" class="view-section">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-4xl font-black mb-2">Dashboard Aset</h2>
+                    <p class="text-gray-600 font-bold">Real-time Inventory Valuation & Health</p>
+                </div>
+                <div class="flex gap-2">
+                    <button class="btn px-4 py-2"><i data-lucide="download" class="w-4 h-4"></i> Export PDF</button>
+                    <button class="btn px-4 py-2"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Refresh Data</button>
+                </div>
+            </div>
+
+            <!-- Top Metrics -->
+            <div class="grid grid-cols-3 gap-8 mb-8">
+                <div class="box p-6 flex flex-col justify-between h-40">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-sm font-bold uppercase text-gray-500">Total Nilai Aset</h3>
+                        <i data-lucide="coins" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <p class="metric-value">Rp 1.25 M</p>
+                        <p class="text-xs font-bold text-green-700 mt-1">▲ 5% dari bulan lalu</p>
+                    </div>
+                </div>
+                <div class="box p-6 flex flex-col justify-between h-40">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-sm font-bold uppercase text-gray-500">Akurasi Stok (Opname)</h3>
+                        <i data-lucide="target" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <p class="metric-value">98.5%</p>
+                        <p class="text-xs font-bold text-gray-500 mt-1">Target: 99%</p>
+                    </div>
+                </div>
+                <div class="box p-6 flex flex-col justify-between h-40 bg-red-50">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-sm font-bold uppercase text-gray-500">Barang Dead Stock (>90 Hari)</h3>
+                        <i data-lucide="alert-octagon" class="w-6 h-6 text-red-600"></i>
+                    </div>
+                    <div>
+                        <p class="metric-value text-red-600">12 SKU</p>
+                        <p class="text-xs font-bold text-red-600 mt-1">Estimasi Rugi: Rp 45 Jt</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts & Alerts -->
+            <div class="grid grid-cols-3 gap-8">
+                <div class="col-span-2 box p-6">
+                    <h3 class="font-bold border-b-2 border-black pb-2 mb-4">Pergerakan Stok (30 Hari Terakhir)</h3>
+                    <!-- Mockup Chart using CSS -->
+                    <div class="flex items-end h-64 gap-4 px-4 pb-4 border-l-2 border-b-2 border-gray-400">
+                        <div class="w-full bg-black h-[40%]" title="Minggu 1"></div>
+                        <div class="w-full bg-black h-[60%]" title="Minggu 2"></div>
+                        <div class="w-full bg-black h-[80%]" title="Minggu 3"></div>
+                        <div class="w-full bg-black h-[50%]" title="Minggu 4"></div>
+                    </div>
+                    <div class="flex justify-between text-xs font-bold mt-2 px-4">
+                        <span>M1</span><span>M2</span><span>M3</span><span>M4</span>
+                    </div>
+                </div>
+                
+                <div class="box p-0">
+                    <div class="p-4 border-b-2 border-black bg-yellow-100">
+                        <h3 class="font-bold flex items-center gap-2"><i data-lucide="bell" class="w-4 h-4"></i> Notifikasi Penting</h3>
+                    </div>
+                    <div class="p-4 space-y-4">
+                        <div class="text-sm border-b border-gray-300 pb-2">
+                            <p class="font-bold text-red-600">Stok Kritis: Paku 5cm</p>
+                            <p class="text-xs text-gray-500">Sisa 2 Box (Min: 5). Segera buat PR.</p>
+                        </div>
+                        <div class="text-sm border-b border-gray-300 pb-2">
+                            <p class="font-bold">Selisih Opname: Gudang B</p>
+                            <p class="text-xs text-gray-500">Ditemukan selisih -5 item. Butuh approval.</p>
+                            <button onclick="nav('approval', document.querySelectorAll('.sidebar-btn')[3])" class="text-xs underline font-bold mt-1">Cek Approval</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. APPROVAL CENTER -->
+        <section id="approval" class="view-section hidden">
+            <h2 class="text-3xl font-black mb-6">Pusat Persetujuan (Approval)</h2>
+            <div class="box p-6 mb-8">
+                <h3 class="font-bold text-lg mb-4 border-b-2 border-black pb-2">
+                    Permintaan Penyesuaian Stok (Stock Adjustment)
+                </h3>
+                <table class="w-full">
+                    <thead>
+                        <tr>
+                            <th>Tgl Request</th>
+                            <th>Oleh (Staff)</th>
+                            <th>Produk</th>
+                            <th>Jenis</th>
+                            <th>Jml Selisih</th>
+                            <th>Alasan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>17 Des 2025</td>
+                            <td>Budi (Staff)</td>
+                            <td><b>FG-101 Meja Makan</b></td>
+                            <td><span class="badge bg-yellow-100">Stock Opname</span></td>
+                            <td class="font-bold text-red-600">-2 Unit</td>
+                            <td>Barang fisik rusak tertimpa</td>
+                            <td class="flex gap-2">
+                                <button onclick="alert('Disetujui')" class="btn px-3 py-1 bg-black text-white hover:bg-green-700 border-black"><i data-lucide="check" class="w-4 h-4"></i> ACC</button>
+                                <button onclick="alert('Ditolak')" class="btn px-3 py-1 bg-white text-red-600 hover:bg-red-100 border-red-600"><i data-lucide="x" class="w-4 h-4"></i> TOLAK</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>16 Des 2025</td>
+                            <td>Siti (Staff)</td>
+                            <td><b>RM-005 Cat Kayu</b></td>
+                            <td><span class="badge bg-blue-100">Pemusnahan</span></td>
+                            <td class="font-bold text-red-600">-10 Kaleng</td>
+                            <td>Expired / Mengeras</td>
+                            <td class="flex gap-2">
+                                <button class="btn px-3 py-1 bg-black text-white hover:bg-green-700"><i data-lucide="check" class="w-4 h-4"></i> ACC</button>
+                                <button class="btn px-3 py-1 bg-white text-red-600 hover:bg-red-100 border-red-600"><i data-lucide="x" class="w-4 h-4"></i> TOLAK</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 3. KARTU STOK (AUDIT) -->
+        <section id="audit" class="view-section hidden">
+            <h2 class="text-3xl font-black mb-6">Kartu Stok Digital (Audit Trail)</h2>
+            
+            <div class="box p-6 mb-6">
+                <!-- Advanced Filter -->
+                <div class="flex gap-4 items-end mb-6">
+                    <div class="flex-1">
+                        <label class="text-xs font-bold uppercase mb-1">Cari SKU / Produk</label>
+                        <input type="text" placeholder="Contoh: RM-001" class="border-2 border-black p-2 w-full font-bold">
+                    </div>
+                    <div class="w-48">
+                        <label class="text-xs font-bold uppercase mb-1">Rentang Waktu</label>
+                        <select class="border-2 border-black p-2 w-full font-bold">
+                            <option>Bulan Ini</option>
+                            <option>3 Bulan Terakhir</option>
+                        </select>
+                    </div>
+                    <div class="w-48">
+                         <label class="text-xs font-bold uppercase mb-1">Gudang</label>
+                        <select class="border-2 border-black p-2 w-full font-bold">
+                            <option>Semua Gudang</option>
+                            <option>Gudang Utama</option>
+                        </select>
+                    </div>
+                    <button class="btn px-6 py-2 bg-black text-white h-[42px]">FILTER DATA</button>
+                </div>
+
+                <!-- Audit Table -->
+                <div class="bg-gray-50 border-2 border-black p-4 mb-2">
+                    <div class="flex justify-between font-bold mb-2">
+                        <span>Produk: Kayu Jati Grade A (RM-001)</span>
+                        <span>Stok Akhir: 150</span>
+                    </div>
+                    <table class="w-full bg-white">
+                        <thead>
+                            <tr>
+                                <th>Tanggal & Waktu</th>
+                                <th>Jenis Mutasi</th>
+                                <th>Ref Dokumen</th>
+                                <th class="text-green-600">Masuk</th>
+                                <th class="text-red-600">Keluar</th>
+                                <th>Saldo</th>
+                                <th>User (Aktor)</th>
+                                <th>Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>17/12/25 14:00</td>
+                                <td><span class="badge">KELUAR</span></td>
+                                <td class="font-mono">WO-2025-105</td>
+                                <td>-</td>
+                                <td class="font-bold text-red-600">10</td>
+                                <td class="font-bold">150</td>
+                                <td>Budi (Staff)</td>
+                                <td>Produksi Meja</td>
+                            </tr>
+                            <tr>
+                                <td>17/12/25 09:00</td>
+                                <td><span class="badge bg-green-100">MASUK</span></td>
+                                <td class="font-mono">PO-2025-101</td>
+                                <td class="font-bold text-green-600">100</td>
+                                <td>-</td>
+                                <td class="font-bold">160</td>
+                                <td>Siti (Staff)</td>
+                                <td>Terima dari Vendor</td>
+                            </tr>
+                            <tr class="bg-gray-100">
+                                <td>01/12/25 00:00</td>
+                                <td><span class="badge">SALDO AWAL</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="font-bold">60</td>
+                                <td>System</td>
+                                <td>Saldo Bulan Lalu</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. STOCK OPNAME -->
+        <section id="opname" class="view-section hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-black">Manajemen Stock Opname</h2>
+                <button onclick="openModal('modal-jadwal')" class="btn px-4 py-2 bg-black text-white"><i data-lucide="calendar-plus" class="w-4 h-4"></i> Jadwalkan SO Baru</button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-8">
+                <!-- Jadwal Aktif -->
+                <div class="box p-6">
+                    <h3 class="font-bold text-lg mb-4 border-b-2 border-black pb-2">Jadwal Berjalan</h3>
+                    <div class="bg-yellow-100 border-2 border-black p-4 mb-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-xl">SO-DES-2025-W1</h4>
+                            <span class="badge bg-black text-white">IN PROGRESS</span>
+                        </div>
+                        <p class="text-sm font-bold mb-1">Area: Gudang Bahan Baku (Rak A - C)</p>
+                        <p class="text-sm mb-4">PIC: Budi Santoso</p>
+                        <div class="w-full bg-white border border-black h-4 mb-1">
+                            <div class="bg-black h-full" style="width: 65%"></div>
+                        </div>
+                        <p class="text-xs text-right font-bold">65% Selesai</p>
+                    </div>
+                </div>
+
+                <!-- Riwayat Hasil -->
+                <div class="box p-6">
+                    <h3 class="font-bold text-lg mb-4 border-b-2 border-black pb-2">Riwayat Opname</h3>
+                    <table class="w-full text-sm">
+                        <thead><tr><th>Kode SO</th><th>Tgl</th><th>Akurasi</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr>
+                                <td>SO-NOV-2025</td>
+                                <td>30 Nov</td>
+                                <td class="font-bold text-green-600">99.2%</td>
+                                <td><span class="badge">SELESAI</span></td>
+                            </tr>
+                             <tr>
+                                <td>SO-OKT-2025</td>
+                                <td>31 Okt</td>
+                                <td class="font-bold text-yellow-600">95.0%</td>
+                                <td><span class="badge">REVIEWED</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 5. LAPORAN -->
+        <section id="report" class="view-section hidden">
+            <h2 class="text-3xl font-black mb-6">Laporan & Analisa</h2>
+            <div class="box p-6 h-96 flex flex-col items-center justify-center border-dashed bg-gray-50">
+                <i data-lucide="bar-chart" class="w-16 h-16 text-gray-400 mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-500">Modul Pelaporan Lanjutan</h3>
+                <p class="text-gray-400">Fitur export Excel dan grafik tren stok tahunan akan tampil di sini.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Jadwal SO -->
+    <div id="modal-jadwal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm">
+        <div class="box p-8 w-[500px] relative">
+            <button onclick="document.getElementById('modal-jadwal').classList.add('hidden')" class="absolute top-4 right-4 btn p-1 border-0"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <h2 class="text-2xl font-bold mb-4 border-b-2 border-black pb-2">Jadwal Stock Opname</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="font-bold text-xs uppercase block mb-1">Judul Kegiatan</label>
+                    <input type="text" placeholder="Contoh: SO Akhir Tahun 2025" class="w-full border-2 border-black p-2">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-bold text-xs uppercase block mb-1">Tanggal Mulai</label>
+                        <input type="date" class="w-full border-2 border-black p-2">
+                    </div>
+                    <div>
+                        <label class="font-bold text-xs uppercase block mb-1">Tanggal Selesai</label>
+                        <input type="date" class="w-full border-2 border-black p-2">
+                    </div>
+                </div>
+                <div>
+                    <label class="font-bold text-xs uppercase block mb-1">Gudang / Lokasi Target</label>
+                    <select class="w-full border-2 border-black p-2">
+                        <option>Semua Gudang</option>
+                        <option>Gudang Utama (Rak A-Z)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="font-bold text-xs uppercase block mb-1">PIC (Penanggung Jawab)</label>
+                    <select class="w-full border-2 border-black p-2">
+                        <option>Budi Santoso</option>
+                    </select>
+                </div>
+                <button class="btn w-full py-3 bg-black text-white mt-4">TERBITKAN JADWAL</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        function nav(id, btn) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+    </script>
+</body>
+</html>

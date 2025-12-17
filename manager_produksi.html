@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Produksi - PT Ekea Apa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Courier New', Courier, monospace; background-color: #e5e5e5; color: #000; }
+        
+        /* Brutalist Styles */
+        .box { 
+            background: white; 
+            border: 3px solid black; 
+            box-shadow: 6px 6px 0px 0px black; 
+        }
+        
+        .btn { 
+            border: 2px solid black; 
+            background: white; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: all 0.1s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .btn:hover { background: black; color: white; transform: translate(-1px, -1px); box-shadow: 3px 3px 0px 0px rgba(0,0,0,0.2); }
+        .btn:active { transform: translate(1px, 1px); box-shadow: none; }
+        
+        /* Sidebar */
+        .sidebar-btn { 
+            text-align: left; 
+            padding: 1rem; 
+            width: 100%; 
+            border: 2px solid transparent; 
+            transition: all 0.2s; 
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: bold;
+        }
+        .sidebar-btn:hover { background-color: #fff; border-color: black; }
+        .sidebar-btn.active { background-color: black; color: white; border-color: black; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        th, td { border-bottom: 2px solid black; padding: 16px; text-align: left; vertical-align: middle; }
+        th { background-color: #f3f4f6; border-top: 2px solid black; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; }
+        tr:hover { background-color: #fef9c3; }
+
+        /* Metrics */
+        .metric-value { font-size: 2rem; font-weight: 900; letter-spacing: -0.05em; }
+        .badge { padding: 4px 8px; font-size: 0.7rem; border: 2px solid black; font-weight: 800; text-transform: uppercase; }
+        
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="w-80 bg-gray-100 border-r-4 border-black flex flex-col z-20">
+        <!-- Identitas Perusahaan -->
+        <div class="p-6 border-b-4 border-black bg-white">
+             <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-black text-white flex items-center justify-center font-black text-xl border-2 border-black">
+                    EA
+                </div>
+                <div>
+                    <h1 class="font-black text-lg leading-none">PT EKEA APA</h1>
+                    <p class="text-[10px] font-bold text-gray-500 tracking-widest mt-1">FURNITURE MFG.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-4 border-b-4 border-black bg-orange-100">
+            <h2 class="font-black text-lg flex items-center gap-2 tracking-tighter">
+                <i data-lucide="factory" class="w-6 h-6"></i> PRODUKSI
+            </h2>
+            <div class="mt-1 inline-block bg-black text-white px-2 py-0.5 text-[10px] font-bold tracking-widest">
+                MANAGER ACCESS
+            </div>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto p-4 space-y-3">
+            <div class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1 border-b-2 border-gray-300 pb-1">Monitoring</div>
+            <button onclick="nav('dash', this)" class="sidebar-btn active">
+                <i data-lucide="activity" class="w-5 h-5"></i> Dashboard KPI
+            </button>
+            <button onclick="nav('report', this)" class="sidebar-btn">
+                <i data-lucide="bar-chart-2" class="w-5 h-5"></i> Laporan Hasil
+            </button>
+
+            <div class="text-xs font-bold text-gray-500 uppercase tracking-widest mt-6 mb-1 border-b-2 border-gray-300 pb-1">Perencanaan</div>
+            <button onclick="nav('wo-plan', this)" class="sidebar-btn">
+                <i data-lucide="calendar-plus" class="w-5 h-5"></i> Perintah Kerja (WO)
+            </button>
+            <button onclick="nav('bom', this)" class="sidebar-btn">
+                <i data-lucide="book-open" class="w-5 h-5"></i> Resep (BOM)
+            </button>
+        </nav>
+
+        <div class="p-6 border-t-4 border-black bg-white">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 bg-gray-200 border-2 border-black flex items-center justify-center font-bold text-lg">M</div>
+                <div class="text-sm">
+                    <p class="font-bold">Bpk. Handoko</p>
+                    <p class="text-gray-500">Manajer Produksi</p>
+                </div>
+            </div>
+            <a href="index.html" class="btn w-full py-3 hover:bg-red-600 hover:text-white hover:border-red-600">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Keluar System
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 overflow-y-auto p-8 bg-gray-200 relative">
+
+        <!-- 1. DASHBOARD KPI -->
+        <section id="dash" class="view-section">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-4xl font-black mb-2">Production Overview</h2>
+                    <p class="text-gray-600 font-bold">Monitoring Kinerja Lantai Produksi (Real-time)</p>
+                </div>
+                <div class="flex gap-2">
+                    <button class="btn px-4 py-2"><i data-lucide="printer" class="w-4 h-4"></i> Cetak Laporan Harian</button>
+                </div>
+            </div>
+
+            <!-- Top Metrics -->
+            <div class="grid grid-cols-4 gap-6 mb-8">
+                <div class="box p-5 flex flex-col justify-between h-36">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xs font-bold uppercase text-gray-500">Realisasi vs Target</h3>
+                        <i data-lucide="target" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <p class="metric-value">85%</p>
+                        <p class="text-xs font-bold text-red-600 mt-1">▼ Under Target (90%)</p>
+                    </div>
+                </div>
+                <div class="box p-5 flex flex-col justify-between h-36">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xs font-bold uppercase text-gray-500">Defect Rate (Cacat)</h3>
+                        <i data-lucide="alert-triangle" class="w-5 h-5 text-red-600"></i>
+                    </div>
+                    <div>
+                        <p class="metric-value text-red-600">2.5%</p>
+                        <p class="text-xs font-bold text-gray-500 mt-1">Batas Max: 2.0%</p>
+                    </div>
+                </div>
+                <div class="box p-5 flex flex-col justify-between h-36">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xs font-bold uppercase text-gray-500">WO Active</h3>
+                        <i data-lucide="settings" class="w-5 h-5 animate-spin-slow"></i>
+                    </div>
+                    <div>
+                        <p class="metric-value">3 WO</p>
+                        <p class="text-xs font-bold text-green-700 mt-1">1 On Schedule</p>
+                    </div>
+                </div>
+                <div class="box p-5 flex flex-col justify-between h-36 bg-black text-white">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xs font-bold uppercase text-gray-400">Total Output (Hari Ini)</h3>
+                        <i data-lucide="package" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <p class="metric-value">120 Unit</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts & Lists -->
+            <div class="grid grid-cols-3 gap-8">
+                <div class="col-span-2 box p-6">
+                    <h3 class="font-bold border-b-2 border-black pb-2 mb-4">Tren Output Produksi (Mingguan)</h3>
+                    <!-- Mockup Chart CSS -->
+                    <div class="flex items-end h-64 gap-6 px-4 pb-4 border-l-2 border-b-2 border-gray-400">
+                        <div class="w-full bg-gray-300 h-[60%] relative group cursor-pointer hover:bg-black transition-all">
+                            <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold opacity-0 group-hover:opacity-100">60</span>
+                        </div>
+                        <div class="w-full bg-gray-300 h-[80%] relative group cursor-pointer hover:bg-black transition-all">
+                            <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold opacity-0 group-hover:opacity-100">80</span>
+                        </div>
+                        <div class="w-full bg-gray-300 h-[75%] relative group cursor-pointer hover:bg-black transition-all">
+                            <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold opacity-0 group-hover:opacity-100">75</span>
+                        </div>
+                        <div class="w-full bg-gray-300 h-[90%] relative group cursor-pointer hover:bg-black transition-all">
+                             <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold opacity-0 group-hover:opacity-100">90</span>
+                        </div>
+                        <div class="w-full bg-gray-300 h-[85%] relative group cursor-pointer hover:bg-black transition-all">
+                             <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold opacity-0 group-hover:opacity-100">85</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between text-xs font-bold mt-2 px-6 text-gray-500">
+                        <span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span>
+                    </div>
+                </div>
+                
+                <div class="box p-0">
+                    <div class="p-4 border-b-2 border-black bg-yellow-100">
+                        <h3 class="font-bold flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4"></i> Status WO Berjalan</h3>
+                    </div>
+                    <div class="p-4 space-y-4">
+                        <div class="text-sm border-b border-gray-300 pb-2">
+                            <div class="flex justify-between mb-1">
+                                <span class="font-bold">WO-2025-105</span>
+                                <span class="text-xs bg-green-200 px-1 border border-black">ON TRACK</span>
+                            </div>
+                            <p class="text-xs text-gray-500">Meja Makan (80/100)</p>
+                            <div class="w-full bg-gray-200 h-1 mt-1"><div class="bg-green-600 h-1 w-[80%]"></div></div>
+                        </div>
+                        <div class="text-sm border-b border-gray-300 pb-2">
+                            <div class="flex justify-between mb-1">
+                                <span class="font-bold">WO-2025-106</span>
+                                <span class="text-xs bg-red-200 px-1 border border-black">DELAYED</span>
+                            </div>
+                            <p class="text-xs text-gray-500">Kursi Tamu (10/50)</p>
+                             <div class="w-full bg-gray-200 h-1 mt-1"><div class="bg-red-600 h-1 w-[20%]"></div></div>
+                            <p class="text-[10px] text-red-500 mt-1 italic">Masalah: Kekurangan Bahan</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. PERENCANAAN WO (PLANNING) -->
+        <section id="wo-plan" class="view-section hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-black">Perintah Kerja (Work Order)</h2>
+                <button onclick="openModal('modal-wo')" class="btn px-4 py-2 bg-black text-white hover:bg-gray-800">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i> Buat WO Baru
+                </button>
+            </div>
+
+            <div class="box p-6 mb-8">
+                <!-- Tabs -->
+                <div class="flex gap-2 border-b-2 border-black mb-4 pb-0">
+                    <button class="px-4 py-2 bg-black text-white font-bold border-t-2 border-x-2 border-black text-sm">Jadwal Aktif</button>
+                    <button class="px-4 py-2 bg-gray-200 text-gray-500 font-bold border-t-2 border-x-2 border-transparent text-sm hover:bg-gray-300">Riwayat Selesai</button>
+                </div>
+
+                <table class="w-full">
+                    <thead>
+                        <tr>
+                            <th>No WO</th>
+                            <th>Produk</th>
+                            <th>Rencana</th>
+                            <th>Tgl Mulai</th>
+                            <th>Tgl Selesai (Est)</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-bold">WO-2025-106</td>
+                            <td>Kursi Tamu Jati</td>
+                            <td>50 Unit</td>
+                            <td>18 Des 2025</td>
+                            <td>20 Des 2025</td>
+                            <td><span class="badge bg-white">TERJADWAL</span></td>
+                            <td class="flex gap-2">
+                                <button class="btn px-2 py-1" title="Edit Jadwal"><i data-lucide="edit" class="w-4 h-4"></i></button>
+                                <button class="btn px-2 py-1 text-red-600 border-red-600" title="Batal"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">WO-2025-105</td>
+                            <td>Meja Makan Minimalis</td>
+                            <td>100 Unit</td>
+                            <td>17 Des 2025</td>
+                            <td>19 Des 2025</td>
+                            <td><span class="badge bg-yellow-200 animate-pulse">DALAM PROSES</span></td>
+                            <td class="flex gap-2">
+                                <button class="btn px-2 py-1" title="Lihat Detail"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 3. MANAJEMEN RESEP (BOM) -->
+        <section id="bom" class="view-section hidden">
+            <h2 class="text-3xl font-black mb-6">Master Resep (Bill of Materials)</h2>
+            
+            <div class="grid grid-cols-3 gap-6">
+                <!-- Product List -->
+                <div class="col-span-1 box p-4 h-[500px] overflow-y-auto">
+                    <h3 class="font-bold border-b-2 border-black pb-2 mb-4">Katalog Produk</h3>
+                    <input type="text" placeholder="Cari Produk..." class="w-full border-2 border-black p-2 mb-4 font-bold text-sm">
+                    
+                    <ul class="space-y-2">
+                        <li class="bg-black text-white p-3 font-bold border-2 border-black cursor-pointer flex justify-between items-center">
+                            <span>Meja Makan Minimalis</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </li>
+                        <li class="bg-white p-3 font-bold border-2 border-black cursor-pointer hover:bg-gray-100 flex justify-between items-center">
+                            <span>Kursi Tamu Jati</span>
+                        </li>
+                        <li class="bg-white p-3 font-bold border-2 border-black cursor-pointer hover:bg-gray-100 flex justify-between items-center">
+                            <span>Lemari 2 Pintu</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Recipe Detail -->
+                <div class="col-span-2 box p-6">
+                    <div class="flex justify-between items-start mb-6 border-b-2 border-black pb-4">
+                        <div>
+                            <h3 class="text-2xl font-black">Meja Makan Minimalis</h3>
+                            <p class="text-sm font-bold text-gray-500">SKU: FG-101 | Versi: 1.0 (Aktif)</p>
+                        </div>
+                        <button class="btn px-4 py-2"><i data-lucide="edit-3" class="w-4 h-4"></i> Edit Resep</button>
+                    </div>
+
+                    <h4 class="font-bold text-sm uppercase mb-2 bg-gray-200 p-2 inline-block">Komposisi Bahan Baku</h4>
+                    <table class="w-full text-sm mb-6">
+                        <thead>
+                            <tr>
+                                <th>Nama Bahan</th>
+                                <th>Kebutuhan per Unit</th>
+                                <th>% Waste</th>
+                                <th>Estimasi Biaya</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Kayu Jati Papan</td>
+                                <td class="font-bold">5 Lembar</td>
+                                <td>5%</td>
+                                <td>Rp 250.000</td>
+                            </tr>
+                            <tr>
+                                <td>Paku Tembak</td>
+                                <td class="font-bold">20 Pcs</td>
+                                <td>1%</td>
+                                <td>Rp 2.000</td>
+                            </tr>
+                            <tr>
+                                <td>Cat Pernis</td>
+                                <td class="font-bold">1 Kaleng</td>
+                                <td>0%</td>
+                                <td>Rp 50.000</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="bg-gray-50">
+                                <td colspan="3" class="text-right font-bold">Total HPP Material:</td>
+                                <td class="font-black text-lg">Rp 302.000</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <div class="bg-yellow-50 p-4 border border-black text-sm">
+                        <p class="font-bold flex items-center gap-2"><i data-lucide="info" class="w-4 h-4"></i> Catatan Proses</p>
+                        <p class="mt-1">Pernis dilakukan 2 kali lapisan. Pengeringan minimal 4 jam.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 4. LAPORAN -->
+        <section id="report" class="view-section hidden">
+            <h2 class="text-3xl font-black mb-6">Laporan Produksi</h2>
+            <div class="box p-6 flex flex-col items-center justify-center border-dashed h-96 bg-gray-50">
+                <i data-lucide="file-text" class="w-16 h-16 text-gray-400 mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-500">Rekapitulasi Hasil Produksi</h3>
+                <p class="text-gray-400 text-center max-w-md mt-2">
+                    Tabel rekapitulasi harian (Good vs Reject) dan analisis downtime mesin akan ditampilkan di sini.
+                </p>
+                <button class="btn mt-4 px-6 py-2"><i data-lucide="download" class="w-4 h-4"></i> Unduh Excel</button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Buat WO -->
+    <div id="modal-wo" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm">
+        <div class="box p-8 w-[600px] relative bg-white">
+            <button onclick="document.getElementById('modal-wo').classList.add('hidden')" class="absolute top-4 right-4 btn p-1 border-0 hover:bg-transparent"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <h2 class="text-2xl font-bold mb-4 border-b-2 border-black pb-2">Buat Perintah Kerja (WO)</h2>
+            
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-bold text-xs uppercase block mb-1">No. WO (Auto)</label>
+                        <input type="text" value="WO-2025-107" disabled class="w-full border-2 border-black p-2 bg-gray-100">
+                    </div>
+                     <div>
+                        <label class="font-bold text-xs uppercase block mb-1">Prioritas</label>
+                        <select class="w-full border-2 border-black p-2">
+                            <option>Normal</option>
+                            <option>Tinggi (Rush)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="font-bold text-xs uppercase block mb-1">Produk Target</label>
+                    <select class="w-full border-2 border-black p-2">
+                        <option>Pilih Produk...</option>
+                        <option>Meja Makan Minimalis</option>
+                        <option>Kursi Tamu Jati</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                     <div>
+                        <label class="font-bold text-xs uppercase block mb-1">Jumlah Rencana (Qty)</label>
+                        <input type="number" class="w-full border-2 border-black p-2" placeholder="0">
+                    </div>
+                    <div>
+                         <label class="font-bold text-xs uppercase block mb-1">Referensi SO (Opsional)</label>
+                        <select class="w-full border-2 border-black p-2">
+                            <option>-</option>
+                            <option>SO-2025-001</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 bg-gray-50 p-3 border border-black border-dashed">
+                     <div>
+                        <label class="font-bold text-xs uppercase block mb-1">Tgl Mulai</label>
+                        <input type="date" class="w-full border-2 border-black p-2">
+                    </div>
+                    <div>
+                         <label class="font-bold text-xs uppercase block mb-1">Tgl Selesai (Est)</label>
+                        <input type="date" class="w-full border-2 border-black p-2">
+                    </div>
+                </div>
+
+                <button class="btn w-full py-3 bg-black text-white mt-2 hover:bg-gray-800">
+                    <i data-lucide="check-circle" class="w-4 h-4 mr-2"></i> TERBITKAN JADWAL
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        function nav(id, btn) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+    </script>
+</body>
+</html>

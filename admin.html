@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Panel - PT Ekea Apa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Courier New', Courier, monospace; background-color: #e5e5e5; color: #000; }
+        
+        /* Brutalist Styles */
+        .box { 
+            background: white; 
+            border: 3px solid black; 
+            box-shadow: 6px 6px 0px 0px black; 
+        }
+        
+        .btn { 
+            border: 2px solid black; 
+            background: white; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: all 0.1s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .btn:hover { background: black; color: white; transform: translate(-1px, -1px); box-shadow: 3px 3px 0px 0px rgba(0,0,0,0.2); }
+        .btn:active { transform: translate(1px, 1px); box-shadow: none; }
+        
+        /* Sidebar */
+        .sidebar-btn { 
+            text-align: left; 
+            padding: 1rem; 
+            width: 100%; 
+            border: 2px solid transparent; 
+            transition: all 0.2s; 
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: bold;
+        }
+        .sidebar-btn:hover { background-color: #fff; border-color: black; }
+        .sidebar-btn.active { background-color: black; color: white; border-color: black; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        th, td { border-bottom: 2px solid black; padding: 12px; text-align: left; vertical-align: middle; }
+        th { background-color: #f3f4f6; border-top: 2px solid black; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; }
+        tr:hover { background-color: #fef9c3; }
+
+        /* Metrics */
+        .metric-value { font-size: 2rem; font-weight: 900; letter-spacing: -0.05em; }
+        .badge { padding: 4px 8px; font-size: 0.7rem; border: 2px solid black; font-weight: 800; text-transform: uppercase; }
+        
+        .hidden { display: none; }
+        
+        /* Tabs */
+        .tab-btn { border-bottom: 2px solid transparent; padding: 0.5rem 1rem; font-weight: bold; color: #666; }
+        .tab-btn.active { border-bottom: 3px solid black; color: black; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="w-80 bg-gray-100 border-r-4 border-black flex flex-col z-20">
+        <!-- Identitas Perusahaan -->
+        <div class="p-6 border-b-4 border-black bg-white">
+             <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-black text-white flex items-center justify-center font-black text-xl border-2 border-black">
+                    EA
+                </div>
+                <div>
+                    <h1 class="font-black text-lg leading-none">PT EKEA APA</h1>
+                    <p class="text-[10px] font-bold text-gray-500 tracking-widest mt-1">FURNITURE MFG.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-4 border-b-4 border-black bg-gray-800 text-white">
+            <h2 class="font-black text-lg flex items-center gap-2 tracking-tighter">
+                <i data-lucide="crown" class="w-6 h-6"></i> OWNER PANEL
+            </h2>
+            <div class="mt-1 inline-block bg-white text-black px-2 py-0.5 text-[10px] font-bold tracking-widest">
+                FULL ACCESS
+            </div>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto p-4 space-y-3">
+            <div class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1 border-b-2 border-gray-300 pb-1">Kontrol Utama</div>
+            <button onclick="nav('dash', this)" class="sidebar-btn active">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard Bisnis
+            </button>
+            <button onclick="nav('users', this)" class="sidebar-btn">
+                <i data-lucide="users" class="w-5 h-5"></i> Manajemen Tim
+            </button>
+
+            <div class="text-xs font-bold text-gray-500 uppercase tracking-widest mt-6 mb-1 border-b-2 border-gray-300 pb-1">Master Data (Inti)</div>
+            <button onclick="nav('master-inv', this)" class="sidebar-btn">
+                <i data-lucide="box" class="w-5 h-5"></i> Produk & Gudang
+            </button>
+            <button onclick="nav('master-mitra', this)" class="sidebar-btn">
+                <i data-lucide="handshake" class="w-5 h-5"></i> Mitra (Vendor/Client)
+            </button>
+            <button onclick="nav('master-fin', this)" class="sidebar-btn">
+                <i data-lucide="landmark" class="w-5 h-5"></i> Akun Keuangan
+            </button>
+        </nav>
+
+        <div class="p-6 border-t-4 border-black bg-white">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 bg-gray-200 border-2 border-black flex items-center justify-center font-bold text-lg">A</div>
+                <div class="text-sm">
+                    <p class="font-bold">Bpk. Herman</p>
+                    <p class="text-gray-500">Owner / CEO</p>
+                </div>
+            </div>
+            <a href="index.html" class="btn w-full py-3 hover:bg-red-600 hover:text-white hover:border-red-600">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Keluar System
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 overflow-y-auto p-8 bg-gray-200 relative">
+
+        <!-- 1. DASHBOARD -->
+        <section id="dash" class="view-section">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-4xl font-black mb-2">Business Overview</h2>
+                    <p class="text-gray-600 font-bold">Helicopter View Kesehatan Bisnis</p>
+                </div>
+                <div class="flex gap-2">
+                    <button class="btn px-4 py-2 bg-black text-white"><i data-lucide="settings" class="w-4 h-4 mr-2"></i> Konfigurasi Sistem</button>
+                </div>
+            </div>
+
+            <!-- Key Metrics -->
+            <div class="grid grid-cols-4 gap-6 mb-8">
+                <div class="box p-5 h-36 flex flex-col justify-between">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xs font-bold uppercase text-gray-500">Total Karyawan</h3>
+                        <i data-lucide="user-check" class="w-5 h-5 text-blue-600"></i>
+                    </div>
+                    <div>
+                        <p class="metric-value">24</p>
+                        <p class="text-xs font-bold text-green-700 mt-1">Semua Divisi Aktif</p>
+                    </div>
+                </div>
+                <div class="box p-5 h-36 flex flex-col justify-between">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xs font-bold uppercase text-gray-500">Katalog Produk</h3>
+                        <i data-lucide="package" class="w-5 h-5 text-orange-600"></i>
+                    </div>
+                    <div>
+                        <p class="metric-value">150 SKU</p>
+                        <p class="text-xs font-bold text-gray-500 mt-1">Siap Jual</p>
+                    </div>
+                </div>
+                <div class="box p-5 h-36 flex flex-col justify-between">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xs font-bold uppercase text-gray-500">Kapasitas Gudang</h3>
+                        <i data-lucide="database" class="w-5 h-5 text-gray-600"></i>
+                    </div>
+                    <div>
+                        <p class="metric-value">85%</p>
+                        <p class="text-xs font-bold text-green-700 mt-1">Terpakai</p>
+                    </div>
+                </div>
+                <div class="box p-5 h-36 flex flex-col justify-between bg-black text-white">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xs font-bold uppercase text-gray-400">Total Aset (Est)</h3>
+                        <i data-lucide="coins" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <p class="metric-value">Rp 2.5 M</p>
+                        <p class="text-xs font-bold text-gray-400 mt-1">Stok + Piutang + Kas</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="box p-6">
+                <h3 class="font-bold border-b-2 border-black pb-2 mb-4">Pintas Cepat</h3>
+                <div class="grid grid-cols-3 gap-4">
+                    <button onclick="nav('users', document.querySelectorAll('.sidebar-btn')[1])" class="btn py-4 flex flex-col gap-2 hover:bg-yellow-50">
+                        <i data-lucide="user-plus" class="w-8 h-8"></i>
+                        <span>Tambah Karyawan Baru</span>
+                    </button>
+                    <button onclick="switchTab('tab-produk', document.querySelectorAll('.tab-btn')[0]); nav('master-inv', document.querySelectorAll('.sidebar-btn')[2])" class="btn py-4 flex flex-col gap-2 hover:bg-yellow-50">
+                        <i data-lucide="package-plus" class="w-8 h-8"></i>
+                        <span>Input Produk Baru</span>
+                    </button>
+                    <button onclick="nav('master-mitra', document.querySelectorAll('.sidebar-btn')[3])" class="btn py-4 flex flex-col gap-2 hover:bg-yellow-50">
+                        <i data-lucide="handshake" class="w-8 h-8"></i>
+                        <span>Kelola Supplier/Klien</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. USER MANAGEMENT -->
+        <section id="users" class="view-section hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-black">Manajemen Tim (User)</h2>
+                <button onclick="openModal('modal-user')" class="btn px-4 py-2 bg-black text-white hover:bg-gray-800">
+                    <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Tambah User Baru
+                </button>
+            </div>
+
+            <div class="box p-6">
+                <table class="w-full">
+                    <thead>
+                        <tr>
+                            <th>Nama Lengkap</th>
+                            <th>Email</th>
+                            <th>Role (Jabatan)</th>
+                            <th>Status Akun</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-bold">Herman Prakoso</td>
+                            <td>admin@ekeapa.com</td>
+                            <td><span class="badge bg-black text-white">OWNER</span></td>
+                            <td><span class="text-green-600 font-bold">AKTIF</span></td>
+                            <td class="flex gap-2">
+                                <button class="btn p-1 px-2" title="Edit"><i data-lucide="edit" class="w-4 h-4"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">Budi Santoso</td>
+                            <td>budi.gudang@ekeapa.com</td>
+                            <td><span class="badge bg-yellow-200">STAFF GUDANG</span></td>
+                            <td><span class="text-green-600 font-bold">AKTIF</span></td>
+                            <td class="flex gap-2">
+                                <button class="btn p-1 px-2" title="Edit"><i data-lucide="edit" class="w-4 h-4"></i></button>
+                                <button class="btn p-1 px-2 border-red-600 text-red-600" title="Reset Password"><i data-lucide="key" class="w-4 h-4"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">Andi Saputra</td>
+                            <td>andi.sales@ekeapa.com</td>
+                            <td><span class="badge bg-blue-200">SALES</span></td>
+                            <td><span class="text-red-600 font-bold">CUTI</span></td>
+                            <td class="flex gap-2">
+                                <button class="btn p-1 px-2" title="Edit"><i data-lucide="edit" class="w-4 h-4"></i></button>
+                                <button class="btn p-1 px-2 border-green-600 text-green-600" title="Aktifkan"><i data-lucide="check" class="w-4 h-4"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 3. MASTER INVENTARIS (PRODUK & GUDANG) -->
+        <section id="master-inv" class="view-section hidden">
+            <h2 class="text-3xl font-black mb-6">Master Data: Inventaris</h2>
+            
+            <div class="grid grid-cols-3 gap-6 h-[600px]">
+                <!-- TAB NAVIGATION -->
+                <div class="col-span-1 box p-4 flex flex-col gap-2 bg-gray-50">
+                    <h3 class="font-bold border-b-2 border-black pb-2 mb-2 uppercase text-xs">Pilih Kategori</h3>
+                    <button onclick="switchTab('tab-produk', this)" class="btn justify-start text-left bg-black text-white tab-btn"><i data-lucide="package" class="w-4 h-4 mr-2"></i> Produk (Barang)</button>
+                    <button onclick="switchTab('tab-gudang', this)" class="btn justify-start text-left tab-btn"><i data-lucide="warehouse" class="w-4 h-4 mr-2"></i> Gudang (Lokasi)</button>
+                </div>
+
+                <!-- CONTENT AREA -->
+                <div class="col-span-2 box p-6 relative">
+                    <!-- Produk Content -->
+                    <div id="tab-produk">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-black text-xl">Daftar Produk</h3>
+                            <button class="btn px-3 py-1 bg-black text-white text-xs">+ Produk Baru</button>
+                        </div>
+                        <div class="overflow-auto h-[500px]">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr>
+                                        <th>SKU</th>
+                                        <th>Nama</th>
+                                        <th>Tipe</th>
+                                        <th>Biaya Std</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="font-mono font-bold">RM-001</td>
+                                        <td>Kayu Jati Log</td>
+                                        <td>Bahan Baku</td>
+                                        <td>Rp 500.000</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-mono font-bold">WIP-001</td>
+                                        <td>Rangka Kursi</td>
+                                        <td>WIP</td>
+                                        <td>Rp 250.000</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-mono font-bold">FG-101</td>
+                                        <td>Meja Makan</td>
+                                        <td>Barang Jadi</td>
+                                        <td>Rp 1.500.000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Gudang Content -->
+                    <div id="tab-gudang" class="hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-black text-xl">Daftar Gudang</h3>
+                            <button class="btn px-3 py-1 bg-black text-white text-xs">+ Gudang Baru</button>
+                        </div>
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Nama Gudang</th>
+                                    <th>Lokasi</th>
+                                    <th>Kapasitas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-bold">WH-01</td>
+                                    <td>Gudang Utama</td>
+                                    <td>Jl. Magelang KM 5</td>
+                                    <td>1000 m2</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold">WH-02</td>
+                                    <td>Gudang Bahan (Produksi)</td>
+                                    <td>Area Pabrik Belakang</td>
+                                    <td>500 m2</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. MASTER MITRA -->
+        <section id="master-mitra" class="view-section hidden">
+            <h2 class="text-3xl font-black mb-6">Master Data: Mitra Bisnis</h2>
+            <div class="box p-6">
+                <div class="flex gap-4 mb-4 border-b-2 border-black pb-2">
+                    <button class="font-bold text-black border-b-2 border-black pb-1">Supplier (Pemasok)</button>
+                    <button class="font-bold text-gray-400 hover:text-black">Customer (Pelanggan)</button>
+                </div>
+                
+                <table class="w-full">
+                    <thead>
+                        <tr>
+                            <th>Nama Perusahaan</th>
+                            <th>Kontak Person</th>
+                            <th>Telepon</th>
+                            <th>Rating</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-bold">CV Kayu Abadi</td>
+                            <td>Bpk. Budi</td>
+                            <td>0812-3456-789</td>
+                            <td><span class="badge bg-green-200">4.5 / 5</span></td>
+                            <td><button class="btn px-2 py-1"><i data-lucide="edit" class="w-4 h-4"></i></button></td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">Toko Besi Sejahtera</td>
+                            <td>Ibu Sari</td>
+                            <td>0811-9876-543</td>
+                            <td><span class="badge bg-yellow-200">3.0 / 5</span></td>
+                            <td><button class="btn px-2 py-1"><i data-lucide="edit" class="w-4 h-4"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 5. MASTER KEUANGAN (COA) -->
+        <section id="master-fin" class="view-section hidden">
+            <h2 class="text-3xl font-black mb-6">Chart of Accounts (COA)</h2>
+            <div class="box p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <input type="text" placeholder="Cari Kode / Nama Akun..." class="border-2 border-black p-2 w-1/3">
+                    <button class="btn px-4 py-2 bg-black text-white"><i data-lucide="plus" class="w-4 h-4 mr-2"></i> Tambah Akun</button>
+                </div>
+                
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr>
+                            <th>Kode Akun</th>
+                            <th>Nama Akun</th>
+                            <th>Tipe</th>
+                            <th>Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-gray-200 font-bold">
+                            <td>1-000</td>
+                            <td>ASET</td>
+                            <td>Header</td>
+                            <td>1</td>
+                        </tr>
+                        <tr class="bg-gray-100 font-bold">
+                            <td class="pl-4">1-100</td>
+                            <td class="pl-4">Aset Lancar</td>
+                            <td>Header</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td class="pl-8 font-mono">1-110</td>
+                            <td class="pl-8">Kas Besar</td>
+                            <td>Detail</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td class="pl-8 font-mono">1-120</td>
+                            <td class="pl-8">Piutang Usaha</td>
+                            <td>Detail</td>
+                            <td>3</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL: ADD USER -->
+    <div id="modal-user" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 backdrop-blur-sm">
+        <div class="box p-8 w-[500px] relative bg-white">
+            <button onclick="closeModal('modal-user')" class="absolute top-4 right-4 btn p-1 border-0 hover:bg-transparent"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <h2 class="text-2xl font-bold mb-6 border-b-2 border-black pb-2">Tambah Karyawan Baru</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold uppercase">Nama Lengkap</label>
+                    <input type="text" class="w-full border-2 border-black p-2">
+                </div>
+                <div>
+                    <label class="text-xs font-bold uppercase">Email</label>
+                    <input type="email" class="w-full border-2 border-black p-2">
+                </div>
+                <div>
+                    <label class="text-xs font-bold uppercase">Password Default</label>
+                    <input type="text" value="123456" class="w-full border-2 border-black p-2 bg-gray-100">
+                </div>
+                <div>
+                    <label class="text-xs font-bold uppercase">Posisi / Role</label>
+                    <select class="w-full border-2 border-black p-2">
+                        <option>Staff Gudang</option>
+                        <option>Operator Produksi</option>
+                        <option>Sales (Penjualan)</option>
+                        <option>Staff Keuangan</option>
+                        <option>Manager Gudang</option>
+                        <option>Manager Produksi</option>
+                        <option>Manager Penjualan</option>
+                        <option>Manager Keuangan</option>
+                    </select>
+                </div>
+                <button class="btn w-full py-3 bg-black text-white hover:bg-gray-800">SIMPAN AKSES</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        function nav(id, btn) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+        
+        function switchTab(tabId, btn) {
+            document.getElementById('tab-produk').classList.add('hidden');
+            document.getElementById('tab-gudang').classList.add('hidden');
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            // Reset button styles
+            btn.parentElement.querySelectorAll('button').forEach(b => {
+                b.classList.remove('bg-black', 'text-white');
+                b.classList.add('text-black');
+            });
+            btn.classList.add('bg-black', 'text-white');
+            btn.classList.remove('text-black');
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

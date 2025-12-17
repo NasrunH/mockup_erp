@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspace Sales - PT Ekea Apa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Courier New', Courier, monospace; background-color: #f3f3f3; color: #000; }
+        
+        /* Brutalist Styles */
+        .box { 
+            background: white; 
+            border: 2px solid black; 
+            box-shadow: 4px 4px 0px 0px black; 
+        }
+        
+        .btn { 
+            border: 2px solid black; 
+            background: white; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: all 0.1s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+        }
+        .btn:hover { background: black; color: white; transform: translate(-1px, -1px); box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.5); }
+        .btn:active { transform: translate(1px, 1px); box-shadow: none; }
+        
+        /* Sidebar */
+        .sidebar-btn { 
+            text-align: left; 
+            padding: 1rem; 
+            width: 100%; 
+            border: 1px solid transparent; 
+            transition: all 0.2s; 
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: bold;
+        }
+        .sidebar-btn:hover { background-color: #e5e5e5; border-color: black; }
+        .sidebar-btn.active { background-color: black; color: white; border-color: black; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        th, td { border-bottom: 2px solid black; padding: 12px; text-align: left; vertical-align: middle; }
+        th { background-color: #f3f4f6; border-top: 2px solid black; font-size: 0.75rem; text-transform: uppercase; }
+        
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="w-72 bg-white border-r-2 border-black flex flex-col z-20">
+        
+        <!-- IDENTITAS PERUSAHAAN -->
+        <div class="p-6 border-b-2 border-black bg-white">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-black text-white flex items-center justify-center font-black text-xl border-2 border-black shadow-[3px_3px_0px_rgba(0,0,0,0.2)]">
+                    EA
+                </div>
+                <div>
+                    <h1 class="font-black text-xl leading-none">PT EKEA APA</h1>
+                    <p class="text-[10px] font-bold text-gray-500 tracking-widest mt-1">FURNITURE MFG.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODUL HEADER -->
+        <div class="p-4 border-b-2 border-black bg-purple-50">
+            <h2 class="font-black text-lg flex items-center gap-2 tracking-tighter">
+                <i data-lucide="shopping-cart" class="w-5 h-5"></i> PENJUALAN
+            </h2>
+            <div class="flex items-center gap-2 mt-1">
+                <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                <p class="text-[10px] font-bold uppercase tracking-widest">Sales Access</p>
+            </div>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+            <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Transaksi</div>
+            <button onclick="nav('dash', this)" class="sidebar-btn active">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+            </button>
+            <button onclick="nav('orders', this)" class="sidebar-btn">
+                <i data-lucide="file-text" class="w-5 h-5"></i> Pesanan (SO)
+            </button>
+
+            <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-6 mb-1">Database</div>
+            <button onclick="nav('customers', this)" class="sidebar-btn">
+                <i data-lucide="users" class="w-5 h-5"></i> Data Pelanggan
+            </button>
+            <button onclick="nav('shipments', this)" class="sidebar-btn">
+                <i data-lucide="truck" class="w-5 h-5"></i> Status Pengiriman
+            </button>
+        </nav>
+
+        <div class="p-4 border-t-2 border-black bg-gray-50">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-8 h-8 bg-black text-white flex items-center justify-center font-bold rounded-full border border-black">S</div>
+                <div class="text-xs">
+                    <p class="font-bold">Andi Saputra</p>
+                    <p class="text-gray-500">Sales Area Jogja</p>
+                </div>
+            </div>
+            <a href="index.html" class="btn w-full py-2 text-red-600 border-red-600 hover:bg-red-600 hover:text-white">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Keluar
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 overflow-y-auto p-8 bg-gray-100 relative">
+
+        <!-- 1. DASHBOARD -->
+        <section id="dash" class="view-section">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <h2 class="text-3xl font-black">Halo, Andi.</h2>
+                    <p class="text-gray-600 font-bold mt-1">Siap mencapai target hari ini?</p>
+                </div>
+                <button onclick="openModal('modal-so')" class="btn py-3 px-6 bg-black text-white text-lg shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all">
+                    <i data-lucide="plus-circle" class="w-6 h-6 mr-2"></i> PESANAN BARU
+                </button>
+            </div>
+
+            <!-- Metrics -->
+            <div class="grid grid-cols-3 gap-6 mb-8">
+                <!-- Target Progress -->
+                <div class="box p-6 border-b-4 border-b-purple-600">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xs font-bold uppercase text-gray-500">Target Bulanan</h3>
+                        <i data-lucide="target" class="w-5 h-5 text-purple-600"></i>
+                    </div>
+                    <p class="text-3xl font-black">Rp 150 Jt</p>
+                    <div class="w-full bg-gray-200 h-2 mt-4 border border-black">
+                        <div class="bg-purple-600 h-2 w-[75%]"></div>
+                    </div>
+                    <p class="text-xs font-bold text-right mt-1">75% Tercapai</p>
+                </div>
+
+                <!-- Open Orders -->
+                <div class="box p-6 border-b-4 border-b-orange-500">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xs font-bold uppercase text-gray-500">Pesanan Aktif</h3>
+                        <i data-lucide="shopping-bag" class="w-5 h-5 text-orange-600"></i>
+                    </div>
+                    <p class="text-3xl font-black">5 Order</p>
+                    <p class="text-xs font-bold text-gray-500 mt-2">3 Menunggu Konfirmasi</p>
+                </div>
+
+                <!-- Top Customer -->
+                <div class="box p-6 border-b-4 border-b-green-600">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xs font-bold uppercase text-gray-500">Pelanggan Top</h3>
+                        <i data-lucide="star" class="w-5 h-5 text-green-600"></i>
+                    </div>
+                    <p class="text-xl font-black truncate">Toko Mebel Jaya</p>
+                    <p class="text-xs font-bold text-gray-500 mt-2">Total Beli: Rp 45.000.000</p>
+                </div>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="box p-6">
+                <h3 class="font-bold border-b-2 border-black pb-2 mb-4">5 Pesanan Terakhir</h3>
+                <table class="w-full">
+                    <thead>
+                        <tr>
+                            <th>No SO</th>
+                            <th>Pelanggan</th>
+                            <th>Tanggal</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-bold">SO-2025-005</td>
+                            <td>Toko Mebel Jaya</td>
+                            <td>17 Des 2025</td>
+                            <td>Rp 15.000.000</td>
+                            <td><span class="bg-yellow-200 border border-black px-2 text-xs font-bold">Draft</span></td>
+                        </tr>
+                         <tr>
+                            <td class="font-bold">SO-2025-004</td>
+                            <td>CV Interior Bagus</td>
+                            <td>16 Des 2025</td>
+                            <td>Rp 2.500.000</td>
+                            <td><span class="bg-green-200 border border-black px-2 text-xs font-bold">Dikonfirmasi</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 2. ORDER LIST (SO) -->
+        <section id="orders" class="view-section hidden">
+            <h2 class="text-3xl font-black mb-6">Daftar Pesanan Penjualan</h2>
+            
+            <div class="flex gap-2 mb-6">
+                <button class="btn px-4 py-2 bg-black text-white">Semua</button>
+                <button class="btn px-4 py-2">Draft</button>
+                <button class="btn px-4 py-2">Dikonfirmasi</button>
+                <button class="btn px-4 py-2">Dikirim</button>
+            </div>
+
+            <div class="box p-6">
+                <table class="w-full">
+                    <thead>
+                        <tr>
+                            <th>No SO</th>
+                            <th>Pelanggan</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Pembayaran</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-bold">SO-2025-005</td>
+                            <td>Toko Mebel Jaya</td>
+                            <td class="font-bold">Rp 15.000.000</td>
+                            <td><span class="bg-yellow-200 border border-black px-2 text-xs font-bold">Draft</span></td>
+                            <td class="text-red-600 font-bold">Belum Lunas</td>
+                            <td class="flex gap-2">
+                                <button class="btn px-2 py-1" title="Edit"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                                <button class="btn px-2 py-1 text-green-600 border-green-600" title="Ajukan Konfirmasi"><i data-lucide="check" class="w-4 h-4"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">SO-2025-004</td>
+                            <td>CV Interior Bagus</td>
+                            <td class="font-bold">Rp 2.500.000</td>
+                            <td><span class="bg-green-200 border border-black px-2 text-xs font-bold">Dikonfirmasi</span></td>
+                            <td class="text-green-600 font-bold">Lunas</td>
+                            <td class="flex gap-2">
+                                <button class="btn px-2 py-1" title="Cetak Invoice"><i data-lucide="printer" class="w-4 h-4"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 3. PELANGGAN -->
+        <section id="customers" class="view-section hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-black">Database Pelanggan</h2>
+                <button onclick="openModal('modal-cust')" class="btn px-4 py-2 bg-black text-white">
+                    <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Pelanggan Baru
+                </button>
+            </div>
+
+            <div class="box p-6">
+                <div class="mb-4">
+                    <input type="text" placeholder="Cari Pelanggan..." class="border-2 border-black p-2 w-1/3 font-bold">
+                </div>
+                <table class="w-full">
+                    <thead>
+                        <tr>
+                            <th>Nama Pelanggan</th>
+                            <th>Kontak</th>
+                            <th>Alamat Kirim</th>
+                            <th>Batas Kredit</th>
+                            <th>Sisa Kredit</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-bold">Toko Mebel Jaya</td>
+                            <td>0812-3456-7890</td>
+                            <td>Jl. Magelang KM 5, Yogyakarta</td>
+                            <td>Rp 50.000.000</td>
+                            <td class="font-bold text-green-600">Rp 35.000.000</td>
+                            <td>
+                                <button class="btn px-2 py-1"><i data-lucide="edit" class="w-4 h-4"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">Ibu Ani (Perorangan)</td>
+                            <td>0811-2233-4455</td>
+                            <td>Jl. Kaliurang KM 9</td>
+                            <td>Rp 5.000.000</td>
+                            <td class="font-bold text-red-600">Rp 0 (Limit)</td>
+                            <td>
+                                <button class="btn px-2 py-1"><i data-lucide="edit" class="w-4 h-4"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 4. PENGIRIMAN -->
+        <section id="shipments" class="view-section hidden">
+            <h2 class="text-3xl font-black mb-6">Status Pengiriman</h2>
+            <div class="box p-6">
+                <table class="w-full">
+                    <thead>
+                        <tr>
+                            <th>No SO</th>
+                            <th>Tgl Kirim</th>
+                            <th>Ekspedisi / Kurir</th>
+                            <th>No Resi</th>
+                            <th>Status Logistik</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-bold">SO-2025-003</td>
+                            <td>15 Des 2025</td>
+                            <td>Mobil Box A (Pak Yanto)</td>
+                            <td>-</td>
+                            <td><span class="bg-green-200 border border-black px-2 text-xs font-bold">TERKIRIM</span></td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">SO-2025-004</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td><span class="bg-yellow-200 border border-black px-2 text-xs font-bold">PROSES PACKING</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- === MODALS === -->
+
+    <!-- MODAL 1: BUAT PESANAN (POS Style) -->
+    <div id="modal-so" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 backdrop-blur-sm">
+        <div class="box p-0 w-[900px] relative bg-white flex h-[600px]">
+            <button onclick="closeModal('modal-so')" class="absolute top-2 right-2 z-10 btn p-1 border-0 hover:bg-transparent text-red-600"><i data-lucide="x-circle" class="w-8 h-8"></i></button>
+
+            <!-- Left: Order Details -->
+            <div class="w-1/3 border-r-2 border-black flex flex-col bg-gray-50">
+                <div class="p-4 border-b-2 border-black">
+                    <h2 class="font-black text-xl mb-4">Detail Pesanan</h2>
+                    <label class="text-xs font-bold uppercase">Pelanggan</label>
+                    <select class="w-full border-2 border-black p-2 mb-2 bg-white">
+                        <option>Pilih Pelanggan...</option>
+                        <option>Toko Mebel Jaya (Sisa: 35jt)</option>
+                    </select>
+                    
+                    <label class="text-xs font-bold uppercase">Tanggal Pesan</label>
+                    <input type="date" class="w-full border-2 border-black p-2 bg-white mb-2">
+                </div>
+
+                <div class="flex-1 p-4 overflow-y-auto">
+                    <label class="text-xs font-bold uppercase mb-2 block">Keranjang Belanja</label>
+                    
+                    <!-- Item List -->
+                    <div class="space-y-2">
+                        <!-- Item 1 -->
+                        <div class="bg-white border border-black p-2 text-sm relative group">
+                            <button class="absolute top-1 right-1 text-red-600 opacity-0 group-hover:opacity-100"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
+                            <p class="font-bold">Meja Makan Minimalis</p>
+                            <div class="flex justify-between text-xs mt-1">
+                                <span>2 x @1.500.000</span>
+                                <span class="font-bold">3.000.000</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 border-t-2 border-black bg-white">
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm">Subtotal</span>
+                        <span class="font-bold">Rp 3.000.000</span>
+                    </div>
+                    <div class="flex justify-between mb-4">
+                        <span class="text-sm">Pajak (11%)</span>
+                        <span class="font-bold">Rp 330.000</span>
+                    </div>
+                    <div class="flex justify-between text-xl font-black border-t border-dashed border-black pt-2 mb-4">
+                        <span>TOTAL</span>
+                        <span>Rp 3.330.000</span>
+                    </div>
+                    <button class="btn w-full py-3 bg-black text-white hover:bg-gray-800">
+                        BUAT PESANAN
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right: Product Catalog -->
+            <div class="w-2/3 p-6 flex flex-col">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-black text-xl">Katalog Produk</h2>
+                    <input type="text" placeholder="Cari Produk..." class="border-2 border-black p-2 w-1/2">
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 overflow-y-auto pb-4">
+                    <!-- Product Card 1 -->
+                    <div class="border-2 border-black p-3 hover:bg-yellow-50 cursor-pointer transition-all active:scale-95">
+                        <div class="w-full h-24 bg-gray-200 mb-2 border border-black flex items-center justify-center font-bold text-gray-400">IMG</div>
+                        <h4 class="font-bold text-sm leading-tight mb-1">Meja Makan Minimalis</h4>
+                        <p class="text-xs text-gray-500 mb-2">Stok: <span class="text-green-600 font-bold">12 Unit</span></p>
+                        <p class="font-black text-sm">Rp 1.500.000</p>
+                    </div>
+
+                    <!-- Product Card 2 -->
+                    <div class="border-2 border-black p-3 hover:bg-yellow-50 cursor-pointer transition-all active:scale-95">
+                        <div class="w-full h-24 bg-gray-200 mb-2 border border-black flex items-center justify-center font-bold text-gray-400">IMG</div>
+                        <h4 class="font-bold text-sm leading-tight mb-1">Kursi Tamu Jati</h4>
+                        <p class="text-xs text-gray-500 mb-2">Stok: <span class="text-green-600 font-bold">45 Unit</span></p>
+                        <p class="font-black text-sm">Rp 750.000</p>
+                    </div>
+
+                    <!-- Product Card 3 -->
+                    <div class="border-2 border-black p-3 hover:bg-yellow-50 cursor-pointer transition-all active:scale-95">
+                        <div class="w-full h-24 bg-gray-200 mb-2 border border-black flex items-center justify-center font-bold text-gray-400">IMG</div>
+                        <h4 class="font-bold text-sm leading-tight mb-1">Lemari 2 Pintu</h4>
+                        <p class="text-xs text-gray-500 mb-2">Stok: <span class="text-red-600 font-bold">2 Unit</span></p>
+                        <p class="font-black text-sm">Rp 2.500.000</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: PELANGGAN BARU -->
+    <div id="modal-cust" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 backdrop-blur-sm">
+        <div class="box p-8 w-[500px] relative bg-white">
+            <button onclick="closeModal('modal-cust')" class="absolute top-4 right-4 btn p-1 border-0 hover:bg-transparent"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <h2 class="text-2xl font-bold mb-6 border-b-2 border-black pb-2">Pelanggan Baru</h2>
+            
+            <div class="space-y-4">
+                <input type="text" placeholder="Nama Pelanggan / Perusahaan" class="w-full border-2 border-black p-2">
+                <input type="email" placeholder="Email" class="w-full border-2 border-black p-2">
+                <input type="text" placeholder="No Telepon" class="w-full border-2 border-black p-2">
+                <textarea placeholder="Alamat Lengkap" rows="3" class="w-full border-2 border-black p-2"></textarea>
+                
+                <div class="grid grid-cols-2 gap-4">
+                     <div>
+                        <label class="text-xs font-bold uppercase">Batas Kredit</label>
+                        <input type="number" placeholder="Rp 0" class="w-full border-2 border-black p-2">
+                     </div>
+                </div>
+
+                <button class="btn w-full py-3 bg-black text-white hover:bg-gray-800">SIMPAN DATA</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        function nav(id, btn) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
