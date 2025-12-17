@@ -5,82 +5,193 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - ERP PT Ekea Apa</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { font-family: 'Courier New', monospace; background-color: #f3f3f3; }
-        .box { border: 2px solid black; background: white; box-shadow: 4px 4px 0 black; }
-        .btn { border: 2px solid black; background: white; font-weight: bold; padding: 0.5rem; transition: 0.1s; display: block; width: 100%; text-align: center; }
-        .btn:hover { background: black; color: white; }
-        .btn:active { transform: translate(2px, 2px); box-shadow: none; }
+        body { font-family: 'Courier New', Courier, monospace; background-color: #f3f3f3; color: #000; }
+        
+        /* Brutalist Styles */
+        .box { 
+            background: white; 
+            border: 3px solid black; 
+            box-shadow: 8px 8px 0px 0px black; 
+        }
+        
+        .btn { 
+            border: 2px solid black; 
+            background: white; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: all 0.1s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .btn:hover { background: black; color: white; transform: translate(-2px, -2px); box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.2); }
+        .btn:active { transform: translate(1px, 1px); box-shadow: none; }
+        
+        /* Inputs */
+        input { 
+            border: 2px solid black; 
+            padding: 0.75rem; 
+            width: 100%; 
+            outline: none;
+            transition: background-color 0.2s;
+            font-weight: bold;
+        }
+        input:focus { background-color: #fffbeb; }
+        
+        /* Links */
+        .role-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .role-link:hover {
+            background-color: #000;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .group-title {
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid #000;
+            padding-bottom: 0.25rem;
+        }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
 
-    <!-- HALAMAN LOGIN -->
-    <div id="page-login" class="box p-8 w-96 text-center">
-        <h1 class="text-3xl font-bold mb-2">ERP SYSTEM</h1>
-        <p class="mb-6 text-sm">PT EKEA APA</p>
+    <div class="box w-full max-w-5xl bg-white flex flex-col md:flex-row overflow-hidden min-h-[600px]">
         
-        <div class="mb-4 text-left">
-            <label class="block font-bold mb-1">Username</label>
-            <input type="text" class="w-full border-2 border-black p-2 outline-none" placeholder="admin / staff / manager">
-        </div>
-        <div class="mb-2 text-left">
-            <label class="block font-bold mb-1">Password</label>
-            <input type="password" class="w-full border-2 border-black p-2 outline-none" placeholder="******">
-        </div>
-        <div class="text-right mb-6">
-            <a href="#" onclick="alert('Hubungi Admin untuk reset password')" class="text-xs underline text-gray-600">Lupa Password?</a>
-        </div>
-        
-        <button class="btn mb-6">MASUK</button>
-        
-        <div class="text-xs text-left border-t-2 border-black pt-4">
-            <p class="font-bold mb-2">Pintas Simulasi (Pilih Aktor):</p>
-            <div class="grid grid-cols-2 gap-2">
-                <a href="admin.html" class="btn text-xs">Admin / Owner</a>
-                <a href="divisi_gudang.html" class="btn text-xs">Divisi Gudang</a>
-                <a href="divisi_produksi.html" class="btn text-xs">Divisi Produksi</a>
-                <a href="divisi_penjualan.html" class="btn text-xs">Divisi Penjualan</a>
-                <a href="divisi_keuangan.html" class="btn text-xs">Divisi Keuangan</a>
-                <button onclick="showError(403)" class="btn text-xs bg-red-100">Test Error 403</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- HALAMAN 404 / 403 (Hidden by default) -->
-    <div id="page-error" class="hidden fixed inset-0 bg-gray-200 flex items-center justify-center z-50">
-        <div class="box p-10 text-center border-4 border-red-600">
-            <h1 id="error-code" class="text-6xl font-bold mb-4">404</h1>
-            <h2 id="error-msg" class="text-xl font-bold mb-6">Halaman Tidak Ditemukan</h2>
-            <button onclick="location.reload()" class="btn mx-auto w-48">KEMBALI KE LOGIN</button>
-        </div>
-    </div>
-
-    <!-- HALAMAN PROFIL (Simulasi) -->
-    <div id="page-profile" class="hidden fixed inset-0 bg-white z-40 p-10">
-        <div class="max-w-md mx-auto box p-6">
-            <h1 class="text-2xl font-bold border-b-2 border-black pb-2 mb-4">Profil Pengguna</h1>
-            <div class="flex items-center gap-4 mb-6">
-                <div class="w-16 h-16 bg-gray-300 border-2 border-black rounded-full flex items-center justify-center font-bold">IMG</div>
-                <div>
-                    <p class="font-bold">Budi Santoso</p>
-                    <p class="text-sm">Staff Gudang</p>
-                    <button class="text-xs underline">Edit Foto</button>
+        <!-- BAGIAN KIRI: LOGIN FORM -->
+        <div class="w-full md:w-1/2 p-10 flex flex-col justify-center border-b-2 md:border-b-0 md:border-r-2 border-black bg-yellow-50 relative">
+            <!-- Decorative Element -->
+            <div class="absolute top-0 left-0 w-full h-4 bg-black"></div>
+            
+            <div class="mb-10">
+                <div class="w-16 h-16 bg-black text-white flex items-center justify-center font-black text-3xl border-4 border-white shadow-[4px_4px_0px_rgba(0,0,0,0.2)] mb-4">
+                    EA
                 </div>
+                <h1 class="text-4xl font-black leading-tight">PT EKEA APA</h1>
+                <p class="text-sm font-bold text-gray-500 tracking-widest mt-1">ENTERPRISE RESOURCE PLANNING</p>
             </div>
-            <label class="block font-bold text-sm">Ganti Password</label>
-            <input type="password" placeholder="Password Baru" class="w-full border-2 border-black p-2 mb-2">
-            <button class="btn mt-4" onclick="location.reload()">SIMPAN & KELUAR</button>
+
+            <form onsubmit="event.preventDefault(); alert('Silakan gunakan panel Simulasi di sebelah kanan.');">
+                <div class="mb-4">
+                    <label class="block text-xs font-bold uppercase mb-1">Username / ID Karyawan</label>
+                    <input type="text" placeholder="Masukkan ID..." class="bg-white">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-xs font-bold uppercase mb-1">Kata Sandi</label>
+                    <input type="password" placeholder="••••••" class="bg-white">
+                </div>
+                <button class="btn w-full py-4 bg-black text-white text-lg hover:bg-gray-800">
+                    <i data-lucide="log-in" class="w-5 h-5"></i> MASUK SISTEM
+                </button>
+                <div class="mt-4 text-center">
+                    <a href="#" class="text-xs font-bold underline hover:text-red-600">Lupa kata sandi? Hubungi Admin.</a>
+                </div>
+            </form>
+
+            <div class="mt-auto pt-8 text-xs text-gray-500 font-mono">
+                System v1.0.0 &bull; Secure Connection
+            </div>
         </div>
+
+        <!-- BAGIAN KANAN: PORTAL SIMULASI (QUICK ACCESS) -->
+        <div class="w-full md:w-1/2 p-10 bg-white">
+            <h2 class="text-xl font-black mb-1 flex items-center gap-2">
+                <i data-lucide="layout-grid" class="w-6 h-6"></i> PORTAL SIMULASI
+            </h2>
+            <p class="text-sm text-gray-500 mb-6">Pilih peran untuk masuk tanpa login (Demo Mode).</p>
+
+            <div class="grid grid-cols-2 gap-x-8 gap-y-6">
+                
+                <!-- Group: Executive -->
+                <div class="col-span-2">
+                    <h3 class="group-title">Executive & Admin</h3>
+                    <a href="admin.html" class="role-link">
+                        <i data-lucide="crown" class="w-4 h-4"></i>
+                        <span>Admin / Owner</span>
+                    </a>
+                </div>
+
+                <!-- Group: Gudang -->
+                <div>
+                    <h3 class="group-title">Divisi Gudang</h3>
+                    <div class="space-y-1">
+                        <a href="staff_gudang.html" class="role-link">
+                            <i data-lucide="package" class="w-4 h-4 text-gray-500"></i> Staff Gudang
+                        </a>
+                        <a href="manager_gudang.html" class="role-link">
+                            <i data-lucide="user-check" class="w-4 h-4 text-gray-500"></i> Manager Gudang
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Group: Produksi -->
+                <div>
+                    <h3 class="group-title">Divisi Produksi</h3>
+                    <div class="space-y-1">
+                        <a href="staff_produksi.html" class="role-link">
+                            <i data-lucide="hammer" class="w-4 h-4 text-gray-500"></i> Operator
+                        </a>
+                        <a href="manager_produksi.html" class="role-link">
+                            <i data-lucide="user-check" class="w-4 h-4 text-gray-500"></i> Manager Produksi
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Group: Penjualan -->
+                <div>
+                    <h3 class="group-title">Divisi Penjualan</h3>
+                    <div class="space-y-1">
+                        <a href="staff_penjualan.html" class="role-link">
+                            <i data-lucide="shopping-cart" class="w-4 h-4 text-gray-500"></i> Staff Sales
+                        </a>
+                        <a href="manager_penjualan.html" class="role-link">
+                            <i data-lucide="user-check" class="w-4 h-4 text-gray-500"></i> Manager Sales
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Group: Keuangan -->
+                <div>
+                    <h3 class="group-title">Divisi Keuangan</h3>
+                    <div class="space-y-1">
+                        <a href="staff_keuangan.html" class="role-link">
+                            <i data-lucide="calculator" class="w-4 h-4 text-gray-500"></i> Staff Accounting
+                        </a>
+                        <a href="manager_keuangan.html" class="role-link">
+                            <i data-lucide="user-check" class="w-4 h-4 text-gray-500"></i> Manager Finance
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="mt-8 p-4 bg-gray-100 border border-black border-dashed text-xs text-center">
+                <p class="font-bold mb-1"><i data-lucide="info" class="inline w-3 h-3"></i> CATATAN DEMO</p>
+                <p class="text-gray-600">Klik salah satu peran di atas untuk langsung masuk ke dashboard masing-masing divisi.</p>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        function showError(code) {
-            document.getElementById('page-login').classList.add('hidden');
-            document.getElementById('page-error').classList.remove('hidden');
-            document.getElementById('error-code').innerText = code;
-            document.getElementById('error-msg').innerText = code === 403 ? "Akses Ditolak (Access Denied)" : "Halaman Tidak Ditemukan";
-        }
+        lucide.createIcons();
     </script>
 </body>
 </html>
