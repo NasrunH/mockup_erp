@@ -3,58 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workspace Staff Keuangan - PT Ekea Apa</title>
+    <title>Staff Keuangan - PT Ekea Apa</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body { font-family: 'Courier New', Courier, monospace; background-color: #f3f3f3; color: #000; }
         
         /* Brutalist Styles */
-        .box { 
-            background: white; 
-            border: 2px solid black; 
-            box-shadow: 4px 4px 0px 0px black; 
-        }
-        
-        .btn { 
-            border: 2px solid black; 
-            background: white; 
-            font-weight: bold; 
-            cursor: pointer; 
-            transition: all 0.1s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            text-transform: uppercase;
-        }
+        .box { background: white; border: 2px solid black; box-shadow: 4px 4px 0px 0px black; }
+        .btn { border: 2px solid black; background: white; font-weight: bold; cursor: pointer; transition: all 0.1s; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; text-transform: uppercase; }
         .btn:hover { background: black; color: white; transform: translate(-1px, -1px); box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.5); }
         .btn:active { transform: translate(1px, 1px); box-shadow: none; }
         
         /* Sidebar */
-        .sidebar-btn { 
-            text-align: left; 
-            padding: 1rem; 
-            width: 100%; 
-            border: 1px solid transparent; 
-            transition: all 0.2s; 
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-weight: bold;
-        }
+        .sidebar-btn { text-align: left; padding: 0.75rem 1rem; width: 100%; border: 1px solid transparent; transition: all 0.2s; display: flex; align-items: center; gap: 0.75rem; font-weight: bold; }
         .sidebar-btn:hover { background-color: #e5e5e5; border-color: black; }
         .sidebar-btn.active { background-color: black; color: white; border-color: black; }
 
-        /* Tables */
-        table { width: 100%; border-collapse: separate; border-spacing: 0; }
-        th, td { border-bottom: 2px solid black; padding: 12px; text-align: left; vertical-align: middle; }
-        th { background-color: #f3f4f6; border-top: 2px solid black; font-size: 0.75rem; text-transform: uppercase; }
-        
-        /* Custom Inputs */
+        /* Tables & Inputs */
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid black; padding: 12px; text-align: left; vertical-align: middle; }
+        th { background-color: #e5e5e5; border-bottom: 2px solid black; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
         input, select, textarea { border: 2px solid black; padding: 0.5rem; width: 100%; outline: none; }
-        input:focus { background-color: #f0fdf4; }
-
+        .badge { padding: 2px 6px; font-size: 0.65rem; border: 1px solid black; font-weight: bold; text-transform: uppercase; }
         .hidden { display: none; }
     </style>
 </head>
@@ -62,290 +33,187 @@
 
     <!-- SIDEBAR -->
     <aside class="w-72 bg-white border-r-2 border-black flex flex-col z-20">
-        
-        <!-- IDENTITAS PERUSAHAAN -->
         <div class="p-6 border-b-2 border-black bg-white">
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-black text-white flex items-center justify-center font-black text-xl border-2 border-black shadow-[3px_3px_0px_rgba(0,0,0,0.2)]">
-                    EA
-                </div>
-                <div>
-                    <h1 class="font-black text-xl leading-none">PT EKEA APA</h1>
-                    <p class="text-[10px] font-bold text-gray-500 tracking-widest mt-1">FURNITURE MFG.</p>
-                </div>
+                <div class="w-12 h-12 bg-black text-white flex items-center justify-center font-black text-xl border-2 border-black">EA</div>
+                <div><h1 class="font-black text-xl leading-none">PT EKEA APA</h1><p class="text-[10px] font-bold text-gray-500 tracking-widest mt-1">FURNITURE MFG.</p></div>
             </div>
         </div>
-
-        <!-- MODUL HEADER -->
         <div class="p-4 border-b-2 border-black bg-green-50">
-            <h2 class="font-black text-lg flex items-center gap-2 tracking-tighter">
-                <i data-lucide="calculator" class="w-5 h-5"></i> AKUNTANSI
-            </h2>
-            <div class="flex items-center gap-2 mt-1">
-                <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                <p class="text-[10px] font-bold uppercase tracking-widest">Staff Access</p>
-            </div>
+            <h1 class="font-bold text-sm flex items-center gap-2 tracking-tighter"><i data-lucide="calculator" class="w-5 h-5"></i> AKUNTANSI</h1>
+            <div class="flex items-center gap-2 mt-1"><div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div><p class="text-[10px] font-bold uppercase tracking-widest">STAFF ACCESS</p></div>
         </div>
-
-        <nav class="flex-1 overflow-y-auto p-4 space-y-2">
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Harian</div>
-            <button onclick="nav('dash', this)" class="sidebar-btn active">
-                <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
-            </button>
-            <button onclick="nav('verification', this)" class="sidebar-btn">
-                <i data-lucide="file-check" class="w-5 h-5"></i> Verifikasi Dokumen
-            </button>
-
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-6 mb-1">Pembukuan</div>
-            <button onclick="nav('journal', this)" class="sidebar-btn">
-                <i data-lucide="book" class="w-5 h-5"></i> Jurnal Umum (GL)
-            </button>
-            <button onclick="nav('coa', this)" class="sidebar-btn">
-                <i data-lucide="list" class="w-5 h-5"></i> Chart of Accounts
-            </button>
+        <nav class="flex-1 overflow-y-auto p-4 space-y-1">
+            <button onclick="nav('dash', this)" class="sidebar-btn active"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button>
+            <div class="border-t border-black my-2"></div>
+            <button onclick="nav('journal-entry', this)" class="sidebar-btn"><i data-lucide="plus-square" class="w-4 h-4"></i> Input Jurnal Umum</button>
+            <button onclick="nav('ledger', this)" class="sidebar-btn"><i data-lucide="book-open" class="w-4 h-4"></i> Buku Besar / Riwayat</button>
+            <div class="border-t border-black my-2"></div>
+            <button onclick="nav('coa', this)" class="sidebar-btn"><i data-lucide="list" class="w-4 h-4"></i> Master Akun (COA)</button>
         </nav>
-
         <div class="p-4 border-t-2 border-black bg-gray-50">
-            <div class="flex items-center gap-3 mb-4">
-                <div class="w-8 h-8 bg-black text-white flex items-center justify-center font-bold rounded-full border border-black">FI</div>
-                <div class="text-xs">
-                    <p class="font-bold">Siti Aminah</p>
-                    <p class="text-gray-500">Staff Accounting</p>
-                </div>
-            </div>
-            <a href="index.html" class="btn w-full py-2 text-red-600 border-red-600 hover:bg-red-600 hover:text-white">
-                <i data-lucide="log-out" class="w-4 h-4"></i> Keluar
-            </a>
+            <div class="flex items-center gap-3 mb-4"><div class="w-8 h-8 bg-black text-white flex items-center justify-center font-bold rounded-full border border-black">A</div><div class="text-xs"><p class="font-bold">Ani Staff</p><p class="text-gray-500">Staff Keuangan</p></div></div>
+            <a href="index.html" class="btn w-full py-2 text-red-600 border-red-600 hover:bg-red-600 hover:text-white"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar</a>
         </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
+    <!-- CONTENT -->
     <main class="flex-1 overflow-y-auto p-8 bg-gray-100 relative">
 
-        <!-- 1. DASHBOARD -->
+        <!-- 1. DASHBOARD KEUANGAN -->
         <section id="dash" class="view-section">
             <div class="flex justify-between items-end mb-6">
-                <div>
-                    <h2 class="text-3xl font-black">Halo, Siti.</h2>
-                    <p class="text-gray-600 font-bold mt-1">Status pembukuan hari ini.</p>
-                </div>
-                <button onclick="openModal('modal-journal')" class="btn py-3 px-6 bg-black text-white text-lg shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all">
-                    <i data-lucide="plus-square" class="w-6 h-6 mr-2"></i> INPUT JURNAL MANUAL
-                </button>
+                <div><h2 class="text-3xl font-bold">Dashboard Keuangan</h2><p class="text-gray-600 mt-1">Antrian penjurnalan hari ini.</p></div>
             </div>
-
-            <!-- Metrics -->
+            
             <div class="grid grid-cols-3 gap-6 mb-8">
-                <!-- Action Required -->
-                <div class="box p-6 border-b-4 border-b-yellow-500">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="text-xs font-bold uppercase text-gray-500">Verifikasi Tertunda</h3>
-                        <i data-lucide="alert-circle" class="w-5 h-5 text-yellow-600"></i>
-                    </div>
-                    <p class="text-3xl font-black">5 Dokumen</p>
-                    <p class="text-xs font-bold text-gray-500 mt-2">2 Invoice Masuk, 3 PO</p>
+                <div class="box p-5 bg-white border-b-4 border-b-blue-600">
+                    <div class="flex justify-between items-start mb-2"><h3 class="text-xs font-bold uppercase text-gray-500">Jurnal Hari Ini</h3><i data-lucide="file-text" class="w-5 h-5 text-blue-600"></i></div>
+                    <h3 class="text-3xl font-bold">15 Transaksi</h3>
                 </div>
-
-                <!-- Cash Position (Mockup) -->
-                <div class="box p-6 border-b-4 border-b-green-600">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="text-xs font-bold uppercase text-gray-500">Saldo Kas Kecil</h3>
-                        <i data-lucide="coins" class="w-5 h-5 text-green-600"></i>
-                    </div>
-                    <p class="text-3xl font-black">Rp 15.200.000</p>
-                    <p class="text-xs font-bold text-gray-500 mt-2">Update Terakhir: 10:00 AM</p>
+                <div class="box p-5 bg-white border-b-4 border-b-green-600">
+                    <div class="flex justify-between items-start mb-2"><h3 class="text-xs font-bold uppercase text-gray-500">Kas Masuk</h3><i data-lucide="arrow-down-circle" class="w-5 h-5 text-green-600"></i></div>
+                    <h3 class="text-3xl font-bold text-green-700">Rp 50.000.000</h3>
                 </div>
-
-                <!-- Unposted -->
-                <div class="box p-6 border-b-4 border-b-gray-600">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="text-xs font-bold uppercase text-gray-500">Jurnal Otomatis (Hari Ini)</h3>
-                        <i data-lucide="server" class="w-5 h-5 text-gray-600"></i>
-                    </div>
-                    <p class="text-3xl font-black">12 Transaksi</p>
-                    <p class="text-xs font-bold text-gray-500 mt-2">Dari Modul Penjualan & Gudang</p>
+                <div class="box p-5 bg-white border-b-4 border-b-red-600">
+                    <div class="flex justify-between items-start mb-2"><h3 class="text-xs font-bold uppercase text-gray-500">Kas Keluar</h3><i data-lucide="arrow-up-circle" class="w-5 h-5 text-red-600"></i></div>
+                    <h3 class="text-3xl font-bold text-red-700">Rp 10.000.000</h3>
                 </div>
             </div>
 
-            <!-- Recent Journals -->
+            <!-- Tabel Menunggu Penjurnalan -->
             <div class="box p-6">
-                <h3 class="font-bold border-b-2 border-black pb-2 mb-4">Jurnal Terakhir (Posted)</h3>
-                <table class="w-full">
-                    <thead>
-                        <tr>
-                            <th>No Ref</th>
-                            <th>Tanggal</th>
-                            <th>Deskripsi</th>
-                            <th>Akun Debit</th>
-                            <th>Akun Kredit</th>
-                            <th>Nominal</th>
-                        </tr>
-                    </thead>
+                <h3 class="font-bold border-b-2 border-black pb-2 mb-4">Menunggu Penjurnalan (Sistem Pintar)</h3>
+                <table class="w-full text-sm">
+                    <thead><tr><th>Tanggal</th><th>Sumber</th><th>No. Ref</th><th>Keterangan</th><th>Aksi</th></tr></thead>
                     <tbody>
                         <tr>
-                            <td class="font-bold font-mono">INV-2025-001</td>
-                            <td>17 Des</td>
-                            <td>Penjualan Kredit a.n Toko Jaya</td>
-                            <td>1-120 Piutang</td>
-                            <td>4-100 Penjualan</td>
-                            <td class="font-bold">Rp 15.000.000</td>
+                            <td>20-Oct</td><td>Penjualan</td><td class="font-mono font-bold">SO-001</td><td>Penjualan ke PT. A</td>
+                            <td><button onclick="prefillJournal('SO-001', 'Penjualan ke PT. A', 5000000)" class="btn px-2 py-1 text-xs bg-blue-100 border-blue-600 text-blue-800">Buat Jurnal</button></td>
                         </tr>
                         <tr>
-                            <td class="font-bold font-mono">BKK-2025-055</td>
-                            <td>17 Des</td>
-                            <td>Bayar Listrik Pabrik</td>
-                            <td>5-200 Beban Listrik</td>
-                            <td>1-110 Kas</td>
-                            <td class="font-bold">Rp 2.500.000</td>
+                            <td>20-Oct</td><td>Pembelian</td><td class="font-mono font-bold">PO-005</td><td>Beli Kayu di Toko B</td>
+                            <td><button onclick="prefillJournal('PO-005', 'Beli Kayu di Toko B', 2000000)" class="btn px-2 py-1 text-xs bg-yellow-100 border-yellow-600 text-yellow-800">Buat Jurnal</button></td>
+                        </tr>
+                        <tr>
+                            <td>21-Oct</td><td>Penggajian</td><td class="font-mono font-bold">GAJI-10</td><td>Gaji Oktober</td>
+                            <td><button onclick="prefillJournal('GAJI-10', 'Gaji Oktober', 15000000)" class="btn px-2 py-1 text-xs bg-green-100 border-green-600 text-green-800">Buat Jurnal</button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </section>
 
-        <!-- 2. VERIFIKASI DOKUMEN -->
-        <section id="verification" class="view-section hidden">
-            <h2 class="text-3xl font-black mb-6">Verifikasi Dokumen</h2>
+        <!-- 2. INPUT JURNAL UMUM (JOURNAL ENTRY) -->
+        <section id="journal-entry" class="view-section hidden">
+            <h2 class="text-3xl font-bold mb-6">Input Jurnal Umum</h2>
             
-            <div class="grid grid-cols-2 gap-6">
-                <!-- Incoming Invoices (Hutang) -->
-                <div class="box p-6">
-                    <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
-                        <i data-lucide="arrow-down-left" class="w-5 h-5"></i> Tagihan Masuk (AP)
-                    </h3>
-                    <div class="space-y-4">
-                        <div class="bg-gray-50 border border-black p-4">
-                            <div class="flex justify-between mb-2">
-                                <span class="font-bold">PO-2025-101</span>
-                                <span class="bg-yellow-200 px-2 text-xs font-bold border border-black">MENUNGGU VERIFIKASI</span>
-                            </div>
-                            <p class="text-sm">Vendor: <b>CV Kayu Abadi</b></p>
-                            <p class="text-sm">Nilai: <b>Rp 5.000.000</b></p>
-                            <div class="mt-3 flex gap-2">
-                                <button class="btn py-1 px-3 text-xs bg-black text-white">Lihat GR</button>
-                                <button onclick="alert('Tagihan diverifikasi. Jurnal Hutang dibuat.')" class="btn py-1 px-3 text-xs bg-green-200 hover:bg-green-300">Verifikasi & Catat Hutang</button>
-                            </div>
+            <div class="flex gap-6 h-[600px]">
+                <!-- Form Header & Detail -->
+                <div class="w-2/3 flex flex-col gap-4">
+                    <div class="box p-4 bg-white">
+                        <h3 class="font-bold border-b border-black pb-1 mb-3">Header Jurnal</h3>
+                        <div class="grid grid-cols-2 gap-4 mb-2">
+                            <div><label class="text-[10px]">No. Jurnal (Auto)</label><input type="text" value="JU-2023-XXX" disabled class="bg-gray-100 font-mono font-bold"></div>
+                            <div><label class="text-[10px]">Tanggal</label><input type="date" value="2023-10-20"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mb-2">
+                            <div><label class="text-[10px]">Sumber Referensi</label><select class="w-full"><option>INVOICE</option><option>PO</option><option>LAINNYA</option></select></div>
+                            <div><label class="text-[10px]">No. Referensi</label><input type="text" id="input-ref" placeholder="Cth: SO-001"></div>
+                        </div>
+                        <div><label class="text-[10px]">Deskripsi</label><input type="text" id="input-desc" placeholder="Keterangan transaksi..."></div>
+                    </div>
+
+                    <div class="box p-4 flex-1 flex flex-col">
+                        <div class="flex justify-between items-center border-b border-black pb-2 mb-3">
+                            <h3 class="font-bold">Detail Akun (Baris Jurnal)</h3>
+                            <button class="btn px-2 py-1 text-xs" onclick="addJournalRow()"><i data-lucide="plus" class="w-3 h-3 mr-1"></i> Tambah Baris</button>
+                        </div>
+                        
+                        <div class="flex-1 overflow-y-auto mb-4">
+                            <table class="w-full text-xs">
+                                <thead class="bg-gray-100"><tr><th>Kode Akun</th><th>Nama Akun</th><th>Debit</th><th>Kredit</th><th></th></tr></thead>
+                                <tbody id="journal-rows">
+                                    <!-- Rows will be added here -->
+                                    <tr>
+                                        <td><select class="w-full"><option>1-1101</option><option>4-1100</option></select></td>
+                                        <td><input type="text" value="Piutang Usaha" readonly class="bg-gray-50 border-none"></td>
+                                        <td><input type="number" class="w-full debit-input" value="5000000" oninput="calcBalance()"></td>
+                                        <td><input type="number" class="w-full credit-input" value="0" oninput="calcBalance()"></td>
+                                        <td class="text-center"><button class="text-red-600 font-bold">X</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><select class="w-full"><option>4-1100</option><option>1-1101</option></select></td>
+                                        <td><input type="text" value="Pendapatan Penjualan" readonly class="bg-gray-50 border-none"></td>
+                                        <td><input type="number" class="w-full debit-input" value="0" oninput="calcBalance()"></td>
+                                        <td><input type="number" class="w-full credit-input" value="5000000" oninput="calcBalance()"></td>
+                                        <td class="text-center"><button class="text-red-600 font-bold">X</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- Sales Invoices (Piutang) -->
-                <div class="box p-6">
-                    <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
-                        <i data-lucide="arrow-up-right" class="w-5 h-5"></i> Faktur Penjualan (AR)
-                    </h3>
-                    <div class="space-y-4">
-                        <div class="bg-gray-50 border border-black p-4">
-                             <div class="flex justify-between mb-2">
-                                <span class="font-bold">SO-2025-005</span>
-                                <span class="bg-green-200 px-2 text-xs font-bold border border-black">DIKIRIM</span>
-                            </div>
-                            <p class="text-sm">Cust: <b>Toko Mebel Jaya</b></p>
-                            <p class="text-sm">Nilai: <b>Rp 15.000.000</b></p>
-                            <div class="mt-3">
-                                <button onclick="alert('Invoice diterbitkan. Jurnal Piutang dibuat.')" class="btn w-full py-1 text-xs bg-black text-white">Terbitkan Invoice</button>
-                            </div>
+                <!-- Footer Validation -->
+                <div class="w-1/3 box p-6 bg-yellow-50 flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-black text-xl mb-4 border-b-2 border-black pb-2">Validasi</h3>
+                        <div class="mb-4">
+                            <label class="text-xs text-gray-500 uppercase">Total Debit</label>
+                            <p class="text-2xl font-bold font-mono" id="total-debit">Rp 5.000.000</p>
+                        </div>
+                        <div class="mb-4">
+                            <label class="text-xs text-gray-500 uppercase">Total Kredit</label>
+                            <p class="text-2xl font-bold font-mono" id="total-credit">Rp 5.000.000</p>
+                        </div>
+                        <div class="p-4 border-2 border-black bg-white text-center" id="balance-status">
+                            <span class="text-green-600 font-black text-xl">BALANCE: YA</span>
                         </div>
                     </div>
+                    <button class="btn w-full py-4 bg-black text-white text-lg hover:bg-gray-800" id="post-btn">SIMPAN & POSTING</button>
                 </div>
             </div>
         </section>
 
-        <!-- 3. JURNAL UMUM -->
-        <section id="journal" class="view-section hidden">
-            <h2 class="text-3xl font-black mb-6">Buku Besar & Jurnal</h2>
+        <!-- 3. BUKU BESAR / RIWAYAT JURNAL -->
+        <section id="ledger" class="view-section hidden">
+            <h2 class="text-3xl font-bold mb-6">Buku Besar & Riwayat Jurnal</h2>
             
             <div class="box p-6 mb-6">
-                <!-- Filters -->
-                <div class="flex gap-4 mb-4">
-                    <input type="date" class="w-48">
-                    <input type="text" placeholder="Cari No Ref / Deskripsi..." class="flex-1">
-                    <button class="btn px-4 bg-black text-white">FILTER</button>
+                <div class="flex gap-4 mb-6 p-4 bg-gray-50 border border-black border-dashed">
+                    <div class="flex-1"><label class="text-[10px] font-bold uppercase">Rentang Tanggal</label><div class="flex gap-2"><input type="date" class="w-1/2"><input type="date" class="w-1/2"></div></div>
+                    <div class="w-64"><label class="text-[10px] font-bold uppercase">Filter Akun</label><select class="w-full"><option>Semua Akun</option><option>Kas Besar</option></select></div>
+                    <div class="flex items-end"><button class="btn px-6 py-1 bg-black text-white h-[38px]">CARI</button></div>
                 </div>
 
                 <table class="w-full text-sm">
-                    <thead>
-                        <tr>
-                            <th>Tgl</th>
-                            <th>No Jurnal</th>
-                            <th>Akun</th>
-                            <th>Ref</th>
-                            <th>Debit</th>
-                            <th>Kredit</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th>Tgl</th><th>No. Jurnal</th><th>Deskripsi</th><th>Akun</th><th>Debit</th><th>Kredit</th><th>Dibuat Oleh</th></tr></thead>
                     <tbody>
-                        <!-- Transaction 1 -->
-                        <tr class="bg-gray-50">
-                            <td>17/12</td>
-                            <td class="font-bold">JU-001</td>
-                            <td colspan="4" class="font-bold italic">Penjualan Kredit Toko Jaya</td>
+                        <tr class="bg-white border-b">
+                            <td>20-Oct</td><td class="font-mono font-bold">JU-001</td><td>Jual PT. A</td><td>Piutang</td><td class="text-right">5.000.000</td><td class="text-right">0</td><td>Ani (Staff)</td>
                         </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td>1-120 Piutang Usaha</td>
-                            <td>SO-005</td>
-                            <td class="font-mono">15.000.000</td>
-                            <td class="font-mono text-gray-400">-</td>
+                        <tr class="bg-gray-50 border-b-2 border-black">
+                            <td></td><td></td><td></td><td>Pendapatan</td><td class="text-right">0</td><td class="text-right">5.000.000</td><td></td>
                         </tr>
-                        <tr class="border-b-2 border-black">
-                            <td></td>
-                            <td></td>
-                            <td>4-100 Pendapatan Penjualan</td>
-                            <td>SO-005</td>
-                            <td class="font-mono text-gray-400">-</td>
-                            <td class="font-mono">15.000.000</td>
-                        </tr>
-                         <!-- Transaction 2 -->
-                        <tr class="bg-gray-50">
-                            <td>17/12</td>
-                            <td class="font-bold">JU-002</td>
-                            <td colspan="4" class="font-bold italic">Beban Gaji Produksi</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td>5-100 Beban Gaji</td>
-                            <td>PAY-DEC</td>
-                            <td class="font-mono">10.000.000</td>
-                            <td class="font-mono text-gray-400">-</td>
-                        </tr>
-                        <tr class="border-b-2 border-black">
-                            <td></td>
-                            <td></td>
-                            <td>1-110 Kas</td>
-                            <td>PAY-DEC</td>
-                            <td class="font-mono text-gray-400">-</td>
-                            <td class="font-mono">10.000.000</td>
-                        </tr>
+                        <!-- More rows -->
                     </tbody>
                 </table>
             </div>
         </section>
 
-        <!-- 4. COA -->
+        <!-- 4. MASTER AKUN (COA) -->
         <section id="coa" class="view-section hidden">
-            <h2 class="text-3xl font-black mb-6">Chart of Accounts (COA)</h2>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold">Master Akun (Chart of Accounts)</h2>
+                <button onclick="openModal('modal-coa')" class="btn px-4 py-2 bg-black text-white"><i data-lucide="plus" class="w-4 h-4 mr-2"></i> Tambah Akun</button>
+            </div>
             <div class="box p-6">
-                <table class="w-full">
-                    <thead>
-                        <tr>
-                            <th>Kode Akun</th>
-                            <th>Nama Akun</th>
-                            <th>Kategori</th>
-                            <th>Saldo Normal</th>
-                        </tr>
-                    </thead>
+                <table class="w-full text-sm">
+                    <thead><tr><th>Kode Akun</th><th>Nama Akun</th><th>Tipe</th><th>Aksi</th></tr></thead>
                     <tbody>
-                        <tr class="bg-gray-200 font-bold"><td colspan="4">1-000 ASET</td></tr>
-                        <tr><td>1-100</td><td>Aset Lancar</td><td>Header</td><td>Debit</td></tr>
-                        <tr><td>1-110</td><td>Kas Besar</td><td>Detail</td><td>Debit</td></tr>
-                        <tr><td>1-120</td><td>Piutang Usaha</td><td>Detail</td><td>Debit</td></tr>
-                        <tr><td>1-130</td><td>Persediaan Barang</td><td>Detail</td><td>Debit</td></tr>
-                        
-                        <tr class="bg-gray-200 font-bold"><td colspan="4">2-000 KEWAJIBAN</td></tr>
-                        <tr><td>2-100</td><td>Hutang Usaha</td><td>Detail</td><td>Kredit</td></tr>
+                        <tr><td class="font-mono font-bold">1-1101</td><td>Kas Besar</td><td>Aset</td><td><button class="btn px-2 py-1 text-xs"><i data-lucide="edit" class="w-3 h-3"></i> Edit</button></td></tr>
+                        <tr><td class="font-mono font-bold">2-1100</td><td>Hutang Dagang</td><td>Kewajiban</td><td><button class="btn px-2 py-1 text-xs"><i data-lucide="edit" class="w-3 h-3"></i> Edit</button></td></tr>
                     </tbody>
                 </table>
             </div>
@@ -353,75 +221,21 @@
 
     </main>
 
-    <!-- === MODALS === -->
-
-    <!-- MODAL: INPUT JURNAL MANUAL -->
-    <div id="modal-journal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 backdrop-blur-sm">
-        <div class="box p-8 w-[800px] relative bg-white">
-            <button onclick="closeModal('modal-journal')" class="absolute top-4 right-4 btn p-1 border-0 hover:bg-transparent"><i data-lucide="x" class="w-6 h-6"></i></button>
-            <h2 class="text-2xl font-bold mb-6 border-b-2 border-black pb-2">Input Jurnal Umum</h2>
-            
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label class="text-xs font-bold uppercase">Tanggal</label>
-                    <input type="date" class="w-full bg-gray-50">
+    <!-- MODAL TAMBAH AKUN -->
+    <div id="modal-coa" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 backdrop-blur-sm">
+        <div class="box p-8 w-[500px] relative bg-white">
+            <button onclick="closeModal('modal-coa')" class="absolute top-4 right-4 btn p-1 border-0 hover:bg-transparent"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <h2 class="text-2xl font-bold mb-6 border-b-2 border-black pb-2">Tambah Akun Baru</h2>
+            <div class="space-y-4">
+                <div><label class="text-xs font-bold uppercase">Kode Akun (Unik)</label><input type="text" class="w-full border-2 border-black p-2"></div>
+                <div><label class="text-xs font-bold uppercase">Nama Akun</label><input type="text" class="w-full border-2 border-black p-2"></div>
+                <div><label class="text-xs font-bold uppercase">Tipe Akun</label>
+                    <select class="w-full border-2 border-black p-2">
+                        <option>Aset</option><option>Kewajiban</option><option>Ekuitas</option><option>Pendapatan</option><option>Beban</option>
+                    </select>
                 </div>
-                <div>
-                    <label class="text-xs font-bold uppercase">No Referensi (Bukti)</label>
-                    <input type="text" placeholder="Contoh: MEMO-001" class="w-full">
-                </div>
+                <button class="btn w-full py-3 bg-black text-white hover:bg-gray-800">SIMPAN AKUN</button>
             </div>
-            <div class="mb-4">
-                <label class="text-xs font-bold uppercase">Deskripsi Transaksi</label>
-                <input type="text" placeholder="Keterangan jurnal..." class="w-full">
-            </div>
-
-            <!-- Dynamic Lines -->
-            <div class="bg-gray-50 border border-black p-4 mb-4">
-                <div class="flex justify-between items-center mb-2">
-                    <h4 class="font-bold text-sm">Baris Jurnal</h4>
-                    <button class="text-xs font-bold underline">+ Tambah Baris</button>
-                </div>
-                
-                <!-- Line 1 -->
-                <div class="flex gap-2 mb-2 items-end">
-                    <div class="flex-1">
-                        <label class="text-[10px] font-bold uppercase">Akun</label>
-                        <select><option>Pilih Akun...</option><option>1-110 Kas</option><option>5-200 Beban Listrik</option></select>
-                    </div>
-                    <div class="w-32">
-                        <label class="text-[10px] font-bold uppercase">Debit</label>
-                        <input type="number" placeholder="0">
-                    </div>
-                    <div class="w-32">
-                        <label class="text-[10px] font-bold uppercase">Kredit</label>
-                        <input type="number" placeholder="0">
-                    </div>
-                    <button class="btn p-2 border-red-500 text-red-500"><i data-lucide="trash" class="w-4 h-4"></i></button>
-                </div>
-                
-                <!-- Line 2 -->
-                <div class="flex gap-2 mb-2 items-end">
-                    <div class="flex-1">
-                         <select><option>Pilih Akun...</option><option>1-110 Kas</option></select>
-                    </div>
-                    <div class="w-32">
-                        <input type="number" placeholder="0">
-                    </div>
-                    <div class="w-32">
-                        <input type="number" placeholder="0">
-                    </div>
-                     <button class="btn p-2 border-red-500 text-red-500"><i data-lucide="trash" class="w-4 h-4"></i></button>
-                </div>
-            </div>
-
-            <!-- Balance Check -->
-            <div class="flex justify-between items-center mb-6 p-2 bg-green-100 border border-green-600">
-                <span class="font-bold text-green-800 flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4"></i> BALANCE</span>
-                <span class="font-bold text-green-800">Selisih: Rp 0</span>
-            </div>
-
-            <button class="btn w-full py-3 bg-black text-white hover:bg-gray-800">SIMPAN & POSTING</button>
         </div>
     </div>
 
@@ -430,14 +244,62 @@
         function nav(id, btn) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
-            document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            if(btn) {
+                document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
         }
-        function openModal(id) {
-            document.getElementById(id).classList.remove('hidden');
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+        function prefillJournal(ref, desc, amount) {
+            nav('journal-entry', document.querySelectorAll('.sidebar-btn')[1]);
+            document.getElementById('input-ref').value = ref;
+            document.getElementById('input-desc').value = desc;
+            // In a real app, this would populate rows too. Mockup logic ends here.
+            alert('Formulir Jurnal telah diisi otomatis dengan data dari ' + ref);
         }
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
+
+        function calcBalance() {
+            let totalDebit = 0;
+            let totalCredit = 0;
+            
+            document.querySelectorAll('.debit-input').forEach(input => totalDebit += parseInt(input.value) || 0);
+            document.querySelectorAll('.credit-input').forEach(input => totalCredit += parseInt(input.value) || 0);
+
+            document.getElementById('total-debit').innerText = "Rp " + totalDebit.toLocaleString();
+            document.getElementById('total-credit').innerText = "Rp " + totalCredit.toLocaleString();
+
+            const statusDiv = document.getElementById('balance-status');
+            const btn = document.getElementById('post-btn');
+
+            if (totalDebit === totalCredit && totalDebit > 0) {
+                statusDiv.innerHTML = '<span class="text-green-600 font-black text-xl">BALANCE: YA</span>';
+                statusDiv.className = "p-4 border-2 border-green-600 bg-green-50 text-center";
+                btn.disabled = false;
+                btn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                btn.classList.add('bg-black');
+            } else {
+                statusDiv.innerHTML = '<span class="text-red-600 font-black text-xl">BALANCE: TIDAK</span>';
+                statusDiv.className = "p-4 border-2 border-red-600 bg-red-50 text-center";
+                btn.disabled = true;
+                btn.classList.add('bg-gray-400', 'cursor-not-allowed');
+                btn.classList.remove('bg-black');
+            }
+        }
+
+        function addJournalRow() {
+            const tbody = document.getElementById('journal-rows');
+            const row = `
+                <tr>
+                    <td><select class="w-full border-2 p-1"><option>Pilih Akun...</option><option>1-1101</option><option>4-1100</option></select></td>
+                    <td><input type="text" placeholder="Nama Akun" readonly class="bg-gray-50 border-none w-full p-1"></td>
+                    <td><input type="number" class="w-full debit-input border-2 p-1" value="0" oninput="calcBalance()"></td>
+                    <td><input type="number" class="w-full credit-input border-2 p-1" value="0" oninput="calcBalance()"></td>
+                    <td class="text-center"><button onclick="this.parentElement.parentElement.remove(); calcBalance()" class="text-red-600 font-bold hover:bg-red-100 px-2">X</button></td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', row);
         }
     </script>
 </body>
